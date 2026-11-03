@@ -82,9 +82,20 @@ const ph=v=>v||'Будет добавлено';
 $('#ad').textContent=CONFIG.address||'Адрес клуба будет добавлен.';
 const q=encodeURIComponent('Brothers Cyber Club');
 const has=CONFIG.lat!=null&&CONFIG.lon!=null;
-$('#mp').innerHTML=has?`<iframe title="Карта 2GIS" loading="lazy" src="https://widgets.2gis.com/widget?type=firmsonmap&options=${encodeURIComponent(JSON.stringify({pos:{lat:CONFIG.lat,lon:CONFIG.lon,zoom:16},opt:{city:'ustkamenogorsk'},org:CONFIG.twoGisFirmId||''}))}"></iframe>`:'<p>Карта появится после добавления адреса и координат<br>в блоке CONFIG.</p>';
-$('#rt').href=has?`https://2gis.kz/routeSearch/rsType/car/to/${CONFIG.lon},${CONFIG.lat}`:`https://2gis.kz/search/${q}`;
-$('#o2').href=CONFIG.twoGisFirmId?`https://2gis.kz/firm/${CONFIG.twoGisFirmId}`:has?`https://2gis.kz/geo/${CONFIG.lon},${CONFIG.lat}`:`https://2gis.kz/search/${q}`;
+if(has&&CONFIG.twoGisKey){
+ $('#mp').innerHTML='';
+ const s=document.createElement('script');s.src='https://mapgl.2gis.com/api/js/v1';
+ s.onload=()=>{const m=new mapgl.Map('mp',{center:[CONFIG.lon,CONFIG.lat],zoom:16,key:CONFIG.twoGisKey});new mapgl.Marker(m,{coordinates:[CONFIG.lon,CONFIG.lat]})};
+ document.head.appendChild(s);
+}else if(has){
+ const k=.004,bb=[CONFIG.lon-k,CONFIG.lat-k/2,CONFIG.lon+k,CONFIG.lat+k/2].join('%2C');
+ $('#mp').innerHTML=`<iframe title="Карта" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${CONFIG.lat}%2C${CONFIG.lon}"></iframe>`;
+}else $('#mp').innerHTML=`<p>${CONFIG.address||'Адрес будет добавлен'}<br>Откройте клуб в 2GIS кнопкой ниже.</p>`;
+const base=CONFIG.twoGisUrl||`https://2gis.kz/search/${q}`;
+const oid=(CONFIG.twoGisUrl||'').match(/\/(?:geo|firm)\/(\d+)/),city=CONFIG.twoGisCity||'ust-kamenogorsk';
+// формат 2GIS: /directions/points/<откуда>|<куда>; пустое «откуда» = местоположение пользователя
+$('#rt').href=has?`https://2gis.kz/${city}/directions/points/%7C${CONFIG.lon}%2C${CONFIG.lat}${oid?'%3B'+oid[1]:''}`:base;
+$('#o2').href=CONFIG.twoGisFirmId?`https://2gis.kz/firm/${CONFIG.twoGisFirmId}`:base;
 $('#cg').innerHTML=[['Адрес',CONFIG.address],['Телефон',CONFIG.phone],['WhatsApp',CONFIG.whatsapp&&'+'+CONFIG.whatsapp],['Instagram',CONFIG.instagram],['График работы',CONFIG.hours]].map(([k,v])=>`<div><dt>${k}</dt><dd class="${v?'':'na'}">${ph(v)}</dd></div>`).join('');
 $('#yr').textContent=new Date().getFullYear();
 // Меню

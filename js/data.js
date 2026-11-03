@@ -2,8 +2,8 @@
 const CONFIG={
   whatsapp:null,            // например "77001234567" (без + и пробелов)
   phone:null, instagram:null, hours:null,
-  address:null, lat:null, lon:null,   // координаты клуба для карты 2GIS
-  twoGisFirmId:null         // ID организации в 2GIS (необязательно)
+  address:'Усть-Каменогорск, ул. Сагадат Нурмагамбетов, 28', lat:49.951129,  lon:82.623684,   // замените на реальные координаты клуба
+twoGisUrl:'https://2gis.kz/ust-kamenogorsk/geo/12807747095499387',        // ID организации в 2GIS (необязательно)
 };
 /* Тариф: T(1 час, 3 часа, 5 часов, день, ночь). Цены в тенге. */
 const T=(h1,h3,h5,day,night)=>({h1,h3,h5,day,night});
