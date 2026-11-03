@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brothers Cyber Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+<header><div class="w">
+<a href="#top" class="logo">Brothers <b>Cyber</b> Club</a>
+<button id="mb" aria-expanded="false" aria-controls="nv">Меню</button>
+<nav id="nv" aria-label="Основная навигация">
+<a href="#top">Главная</a><a href="#zones">Игровые зоны</a><a href="#prices">Цены</a><a href="#contacts">Контакты</a>
+<a class="btn sm" href="#bk">Забронировать</a>
+</nav></div></header>
+
+<main id="top">
+<section class="hero"><div class="ph"><span>Фото игрового зала</span></div><div class="w">
+<h1>Brothers<br><i>Cyber</i> Club</h1>
+<p class="t">Твоя игра. Твоя команда. Твоя территория.</p>
+<p class="m">Игровые зоны, комфортные места и атмосфера, ради которой хочется возвращаться.</p>
+<div class="bt"><a class="btn" href="#bk">Забронировать место</a><a class="btn s" href="#zones">Посмотреть игровые зоны</a></div>
+</div></section>
+
+<section id="zones"><div class="w rv">
+<h2>Игровые зоны</h2><p class="lead">Выберите формат: общий зал для одиночной игры, VIP для комфорта или отдельная комната для команды.</p>
+<div class="zg" id="zg"></div></div></section>
+
+<section id="bk"><div class="w rv">
+<h2>Бронирование</h2><p class="lead">Соберите заявку — мы подготовим сообщение в WhatsApp. Бронь подтверждает администратор клуба.</p>
+<div class="bkg"><form id="bf" novalidate>
+<fieldset><legend>1. Зона</legend><div class="row" id="bz" role="group"></div></fieldset>
+<fieldset><legend>2. День</legend><div class="row" id="bday" role="group"></div></fieldset>
+<fieldset><legend>3. Время начала</legend><div class="slots" id="btime" role="group"></div></fieldset>
+<fieldset><legend>4. Тариф</legend><div class="row" id="bpk" role="group"></div></fieldset>
+<fieldset><legend>5. Количество компьютеров</legend>
+<div class="qty"><button type="button" id="qm" aria-label="Меньше">−</button><output id="qn" aria-live="polite">1</output><button type="button" id="qp" aria-label="Больше">+</button></div></fieldset>
+<fieldset><legend>6. Контакты</legend>
+<div class="g2"><div><label for="nm">Имя</label><input id="nm" autocomplete="name" required></div>
+<div><label for="ph">Телефон</label><div class="pf"><span>+7</span><input id="ph" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="700 000 00 00" required></div></div></div>
+<div class="err" id="er" role="alert"></div></fieldset>
+</form>
+<aside class="sum" aria-live="polite"><h3>Ваша заявка</h3>
+<dl><dt>Зона</dt><dd id="s1">—</dd><dt>Дата</dt><dd id="s2">—</dd><dt>Время</dt><dd id="s3">—</dd><dt>Тариф</dt><dd id="s4">—</dd><dt>Компьютеры</dt><dd id="s5">—</dd></dl>
+<div class="tot" id="s6">—</div><small id="s7">Предварительная стоимость</small>
+<button class="btn" id="send" type="button" style="width:100%">Отправить заявку в WhatsApp</button></aside></div>
+</div></section>
+
+<section id="prices"><div class="w rv">
+<h2>Цены</h2><p class="lead">Стоимость в тенге (₸). Будни и выходные — по прайс-листу клуба. «День» — с 10:00 до 18:00.</p>
+<div class="ov"><table><thead><tr><th>Зона</th><th>1 час</th><th>3 часа</th><th>5 часов</th><th>День</th><th>Ночь</th><th></th></tr></thead><tbody id="pt"></tbody></table></div>
+<div class="pcards" id="pm"></div></div></section>
+
+<section><div class="w rv adv"><div><h2>Что внутри</h2><p class="lead" style="margin:0">Всё, что нужно для долгой игры.</p></div>
+<ul><li>Топовое железо</li><li>Премиальная периферия</li><li>Мониторы 360 Гц</li><li>Удобные игровые кресла</li><li>Быстрый интернет</li><li>Мощное охлаждение</li></ul></div></section>
+
+<section id="map"><div class="w rv"><h2>Как нас найти</h2><p class="lead" id="ad"></p>
+<div class="map" id="mp"></div>
+<div class="row"><a class="btn" id="rt" target="_blank" rel="noopener">Построить маршрут</a><a class="btn s" id="o2" target="_blank" rel="noopener">Открыть в 2GIS</a></div></div></section>
+
+<section id="contacts"><div class="w rv"><h2>Контакты</h2>
+<dl class="cg" id="cg"></dl><a class="btn" href="#bk">Забронировать место</a></div></section>
+</main>
+
+<footer><div class="w"><span class="logo">Brothers <b>Cyber</b> Club</span>
+<nav><a href="#zones">Зоны</a><a href="#prices">Цены</a><a href="#contacts">Контакты</a></nav>
+<span>© <span id="yr"></span> Brothers Cyber Club</span></div></footer>
+
+<script src="/js/data.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
