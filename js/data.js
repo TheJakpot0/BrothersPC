@@ -1,7 +1,7 @@
 /* ===== ДАННЫЕ САЙТА: меняйте цены, зоны, контакты и компьютеры здесь ===== */
 const CONFIG={
-  whatsapp:null,            // например "77001234567" (без + и пробелов)
-  phone:null, instagram:null, hours:null,
+  whatsapp:"77778300406",            // например "77001234567" (без + и пробелов)
+  phone:"77778300406", instagram:"https://www.instagram.com/brothers_oskemen", hours:null,
   address:'Усть-Каменогорск, ул. Сагадат Нурмагамбетов, 28', lat:49.951129,  lon:82.623684,   // замените на реальные координаты клуба
 twoGisUrl:'https://2gis.kz/ust-kamenogorsk/geo/12807747095499387',        // ID организации в 2GIS (необязательно)
 };
