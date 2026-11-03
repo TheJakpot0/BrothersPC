@@ -104,11 +104,12 @@ footer nav{display:flex;position:static;padding:0;border:0;flex-direction:row}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}.rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 
-.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
-.slots .chip{text-align:center;padding:9px 0}
 .qty{display:inline-flex;align-items:center;border:1px solid var(--ln)}
 .qty button{width:48px;height:48px;background:var(--bg);color:var(--y);border:0;font:500 22px Inter,sans-serif;cursor:pointer;transition:background .2s}
 .qty button:hover{background:var(--panel)}
 .qty output{min-width:56px;text-align:center;font:700 22px Oswald,sans-serif}
 .pf{display:flex}
 .pf span{display:grid;place-items:center;padding:0 14px;border:1px solid var(--ln);border-right:0;background:var(--bg);color:var(--y);font-weight:600}
+.slots{height:232px;overflow-y:auto;scroll-snap-type:y mandatory;border:1px solid var(--ln);background:var(--bg);overscroll-behavior:contain;scrollbar-color:var(--y) var(--bg);scrollbar-width:thin}
+.slots .chip{display:block;width:100%;text-align:center;border:0;border-bottom:1px solid var(--ln);padding:14px 0;font-size:17px;scroll-snap-align:start}
+.slots .chip[aria-pressed=true]{background:var(--y);color:#090A0D}

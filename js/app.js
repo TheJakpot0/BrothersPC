@@ -21,7 +21,8 @@ $('#pm').innerHTML=ZONES.map(z=>{
 // Конструктор бронирования
 const dLong=d=>d.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
 const packLabel=k=>k==='day'?'День (10:00–18:00)':cols.find(c=>c[0]===k)[1];
-const isPast=t=>st.di===0&&+t.slice(0,2)<=new Date().getHours();
+const toMin=t=>+t.slice(0,2)*60+ +t.slice(3);
+const isPast=t=>{const n=new Date();return st.di===0&&toMin(t)<=n.getHours()*60+n.getMinutes()};
 function fixTime(){
  if(st.pack==='day')st.time='10:00';
  else if(st.time&&isPast(st.time))st.time=null;
@@ -31,7 +32,9 @@ function renderAll(){
  $('#bz').innerHTML=ZONES.map(z=>`<button type="button" class="chip" aria-pressed="${z.id===st.zone}" data-z="${z.id}">${z.name}</button>`).join('');
  $('#bday').innerHTML=[0,1].map(i=>{const d=dateOf(i);return `<button type="button" class="chip" aria-pressed="${st.di===i}" data-d="${i}">${i?'Завтра':'Сегодня'}, ${dLong(d)} (${isWE(d)?'выходной':'будни'})</button>`}).join('');
  fixTime();
- $('#btime').innerHTML=Array.from({length:24},(_,h)=>{const t=p2(h)+':00';const off=st.pack==='day'?t!=='10:00':isPast(t);return `<button type="button" class="chip" aria-pressed="${st.time===t}" data-t="${t}" ${off?'disabled':''}>${t}</button>`}).join('');
+ const bt=$('#btime'),prev=bt.scrollTop;
+ bt.innerHTML=Array.from({length:1440/TIME_STEP},(_,i)=>{const m=i*TIME_STEP,t=p2(Math.floor(m/60))+':'+p2(m%60);const off=st.pack==='day'?t!=='10:00':isPast(t);return `<button type="button" class="chip" aria-pressed="${st.time===t}" data-t="${t}" ${off?'disabled':''}>${t}</button>`}).join('');
+ if(st.sc){bt.scrollTop=prev}else{const t=bt.querySelector('[aria-pressed=true]')||bt.querySelector('button:not(:disabled)');if(t)bt.scrollTop=t.offsetTop-bt.offsetTop;st.sc=true}
  $('#bpk').innerHTML=cols.map(([k])=>{const p=priceNow(k);return `<button type="button" class="chip" aria-pressed="${st.pack===k}" data-k="${k}">${packLabel(k)}${p!=null?' · '+fmt(p):''}</button>`}).join('');
  document.querySelectorAll('.z').forEach(e=>e.classList.toggle('sel',e.id==='zc-'+st.zone));
  upd();
@@ -51,9 +54,9 @@ function upd(){
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-z],[data-d],[data-t],[data-k]');if(!b)return;
  if(b.dataset.z){st.zone=b.dataset.z;renderAll();if(!b.classList.contains('chip'))$('#bk').scrollIntoView({behavior:'smooth'})}
- else if(b.dataset.d!==undefined){st.di=+b.dataset.d;renderAll()}
+ else if(b.dataset.d!==undefined){st.di=+b.dataset.d;st.sc=false;renderAll()}
  else if(b.dataset.t){st.time=b.dataset.t;renderAll()}
- else{st.pack=b.dataset.k;renderAll()}
+ else{st.pack=b.dataset.k;st.sc=false;renderAll()}
 });
 $('#qm').onclick=()=>{st.n=Math.max(1,st.n-1);upd()};
 $('#qp').onclick=()=>{st.n=Math.min(20,st.n+1);upd()};
