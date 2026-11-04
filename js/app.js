@@ -290,11 +290,6 @@ $("#qp").onclick = () => {
   upd();
 };
 
-$("#pc-nearby").addEventListener("change", (e) => {
-  st.pcNearby = e.target.checked;
-  upd();
-});
-
 $("#ph").addEventListener("input", (e) => {
   let g = e.target.value.replace(/\D/g, "");
   if (g.length > 10 && (g[0] === "7" || g[0] === "8")) {
