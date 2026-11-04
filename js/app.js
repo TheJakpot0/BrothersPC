@@ -119,8 +119,17 @@ const isPast = (t) => {
   return st.di === 0 && toMin(t) <= n.getHours() * 60 + n.getMinutes();
 };
 
+const isTimeUnavailable = (t) => {
+  const min = toMin(t);
+  return st.pack === "day"
+    ? isPast(t) || min < 10 * 60 || min > 18 * 60
+    : st.pack === "night"
+      ? isPast(t) || (min < 22 * 60 && min >= 8 * 60)
+      : isPast(t);
+};
+
 function fixTime() {
-  if (st.time && isPast(st.time)) {
+  if (st.time && isTimeUnavailable(st.time)) {
     st.time = null;
   }
 }
@@ -175,13 +184,7 @@ function renderAll() {
   bt.innerHTML = Array.from({ length: 1440 / TIME_STEP }, (_, i) => {
     const m = i * TIME_STEP;
     const t = `${p2(Math.floor(m / 60))}:${p2(m % 60)}`;
-    const min = toMin(t);
-    const off =
-      st.pack === "day"
-        ? isPast(t) || min >= 18 * 60
-        : st.pack === "night"
-          ? isPast(t) || (min < 22 * 60 && min >= 8 * 60)
-          : isPast(t);
+    const off = isTimeUnavailable(t);
 
     return `<button type="button" class="chip" aria-pressed="${st.time === t}" data-t="${t}" ${off ? "disabled" : ""}>${t}</button>`;
   }).join("");
