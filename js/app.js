@@ -238,6 +238,7 @@ function upd() {
       ? "Цена не внесена — стоимость уточнит администратор"
       : `По прайс-листу (${isWE(d) ? "выходные" : "будни"})${st.n > 1 ? `, ${st.n} ПК` : ""}`;
 }
+  
 
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-z],[data-d],[data-t],[data-k]");
@@ -267,6 +268,11 @@ document.addEventListener("click", (e) => {
     st.sc = false;
     renderAll();
   }
+});
+
+$("#pc-nearby").addEventListener("change", (e) => {
+  st.pcNearby = e.target.checked;
+  upd();
 });
 
 $("#qm").onclick = () => {
