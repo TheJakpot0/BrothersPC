@@ -614,6 +614,15 @@ details .in div {
 .cg dd {
   font-size: 18px;
 }
+.cg .instagram-link {
+  color: var(--y);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+.cg .instagram-link:hover {
+  color: var(--tx);
+}
 footer {
   border-top: 1px solid var(--ln);
   padding: 28px 0;

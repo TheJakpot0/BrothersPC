@@ -410,10 +410,13 @@ $("#cg").innerHTML = [
   ["Instagram", CONFIG.instagram],
   ["График работы", CONFIG.hours],
 ]
-  .map(
-    ([k, v]) =>
-      `<div><dt>${k}</dt><dd class="${v ? "" : "na"}">${ph(v)}</dd></div>`,
-  )
+  .map(([k, v]) => {
+    const value =
+      k === "Instagram" && v
+        ? `<a class="instagram-link" href="${v}" target="_blank" rel="noopener noreferrer">@${new URL(v).pathname.split("/").filter(Boolean).pop()}</a>`
+        : ph(v);
+    return `<div><dt>${k}</dt><dd class="${v ? "" : "na"}">${value}</dd></div>`;
+  })
   .join("");
 $("#yr").textContent = new Date().getFullYear();
 
