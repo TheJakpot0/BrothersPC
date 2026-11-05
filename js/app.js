@@ -149,9 +149,18 @@ function updateQtyControls() {
   const max = getMaxPc();
   const minus = $("#qm");
   const plus = $("#qp");
+  const nearby = $("#pc-nearby");
 
   minus.disabled = st.n <= min;
   plus.disabled = st.n >= max;
+  nearby.disabled = st.n <= min;
+  nearby.title = nearby.disabled
+    ? "Доступно при выборе двух или более ПК"
+    : "Выбрать ПК рядом";
+  if (nearby.disabled) {
+    st.pcNearby = false;
+  }
+  nearby.checked = st.pcNearby;
 
   minus.title = st.n <= min ? "Минимум 1 ПК" : "Уменьшить количество ПК";
   plus.title =
@@ -274,7 +283,8 @@ document.addEventListener("click", (e) => {
 });
 
 $("#pc-nearby").addEventListener("change", (e) => {
-  st.pcNearby = e.target.checked;
+  st.pcNearby = st.n > 1 && e.target.checked;
+  e.target.checked = st.pcNearby;
   upd();
 });
 

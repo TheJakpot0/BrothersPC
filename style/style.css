@@ -735,10 +735,17 @@ footer nav {
   font-size: 16px;
   cursor: pointer;
 }
+.check-inline:has(input:disabled) {
+  cursor: not-allowed;
+}
 .check-inline input {
   width: 22px;
   height: 22px;
   accent-color: var(--y);
+}
+.check-inline input:disabled,
+.check-inline input:disabled + span {
+  cursor: not-allowed;
 }
 .pf {
   display: flex;
