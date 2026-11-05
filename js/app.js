@@ -119,7 +119,7 @@ $("#pm").innerHTML = ZONES.map((z) => {
 const dLong = (d) =>
   d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
 const packLabel = (k) =>
-  k === "day" ? "День (10:00–18:00)" : cols.find((c) => c[0] === k)[1];
+  k === "day" ? "День (10:00–18:00)" : k === "night" ? "Ночь (22:00–10:00)" : cols.find((c) => c[0] === k)[1];
 const toMin = (t) => +t.slice(0, 2) * 60 + +t.slice(3);
 const isPast = (t) => {
   const n = new Date();
