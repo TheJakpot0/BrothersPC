@@ -278,6 +278,48 @@ nav a:hover {
   inset: 0;
   background: rgba(9, 10, 13, 0.484);
   pointer-events: none;
+  transition: background 0.3s ease;
+}
+.z:hover .im::after {
+  background: rgba(9, 10, 13, 0.826);
+}
+.z .specs {
+  position: absolute;
+  z-index: 1;
+  left: 12px;
+  bottom: 10px;
+  display: grid;
+  gap: 3px;
+  padding: 0;
+  list-style: none;
+  color: #090a0d;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.z .specs li {
+  display: flex;
+  gap: 4px;
+  width: max-content;
+  padding: 3px 7px;
+  background: rgba(245, 211, 61, 0.92);
+}
+.z .specs strong {
+  color: #090a0d;
+  font-weight: 600;
+}
+@media (hover: hover) and (pointer: fine) {
+  .z .specs {
+    opacity: 0;
+    transform: translateY(110%);
+    transition:
+      opacity 0.25s ease,
+      transform 0.3s ease;
+  }
+  .z:hover .specs,
+  .z:focus-within .specs {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .z:hover .im img {
   transform: scale(1.04);
