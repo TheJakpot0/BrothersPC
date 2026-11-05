@@ -34,7 +34,7 @@ $("#zg").innerHTML = ZONES.map(
         <h3>${z.name}</h3>
         <p>${z.desc}</p>
         <div class="ft">
-          <span>${z.seats ? `${z.seats} мест` : "Мест: уточняется"}</span>
+          <span>${z.seats ? `${z.seats} ПК` : "Мест: уточняется"}</span>
           <button class="btn sm" data-z="${z.id}">Забронировать</button>
         </div>
       </div>
