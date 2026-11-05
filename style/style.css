@@ -543,7 +543,7 @@ textarea {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 640px;
 }
 th,
 td {
@@ -578,31 +578,6 @@ td.zn small {
 }
 .na {
   color: var(--mu);
-}
-.price-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-.price-column {
-  min-width: 0;
-  padding: 8px;
-  border: 1px solid var(--ln);
-}
-.price-column.active {
-  border: 2px solid var(--y);
-  padding: 7px;
-}
-.price-column > strong {
-  display: none;
-}
-.price-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.8;
-  white-space: nowrap;
 }
 .pcards {
   display: none;
@@ -642,11 +617,9 @@ details .in {
   gap: 8px;
   font-size: 15px;
 }
-.pcards .price-column > strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--y);
-  font-size: 13px;
+details .in div {
+  display: flex;
+  justify-content: space-between;
 }
 .adv {
   display: grid;
