@@ -348,7 +348,7 @@ $("#send").addEventListener("click", () => {
   const c = cost();
   const comment = $("#comment").value.trim();
   const msg = [
-    "Здравствуйте! Хочу забронировать место в Brothers Cyber Club.",
+    "Здравствуйте! Хочу забронировать место в Brothers Cyber Lounge.",
     "",
     `Зона: ${zn(st.zone).name}`,
     `Дата: ${$("#s2").textContent}`,
