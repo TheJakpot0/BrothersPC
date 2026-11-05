@@ -376,7 +376,8 @@ label {
   margin-bottom: 6px;
 }
 input,
-select {
+select,
+textarea {
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--ln);
@@ -388,9 +389,18 @@ select {
   color-scheme: dark;
 }
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: var(--y);
   outline: 0;
+}
+.comment-field {
+  margin-top: 12px;
+}
+textarea {
+  min-height: 100px;
+  max-height: 180px;
+  resize: vertical;
 }
 .g2 {
   display: grid;

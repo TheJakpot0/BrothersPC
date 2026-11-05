@@ -346,6 +346,7 @@ $("#send").addEventListener("click", () => {
   $("#er").textContent = "";
 
   const c = cost();
+  const comment = $("#comment").value.trim();
   const msg = [
     "Здравствуйте! Хочу забронировать место в Brothers Cyber Club.",
     "",
@@ -359,10 +360,13 @@ $("#send").addEventListener("click", () => {
     "",
     `Имя: ${$("#nm").value.trim()}`,
     `Телефон: +7 ${$("#ph").value}`,
-  ].join("\n");
+  ];
+  if (comment) {
+    msg.push("", `Комментарий:\n${comment}`);
+  }
 
   window.open(
-    `https://wa.me/${CONFIG.whatsapp || ""}?text=${encodeURIComponent(msg)}`,
+    `https://wa.me/${CONFIG.whatsapp || ""}?text=${encodeURIComponent(msg.join("\n"))}`,
     "_blank",
     "noopener",
   );
