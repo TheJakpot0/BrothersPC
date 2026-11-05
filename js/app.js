@@ -22,7 +22,7 @@ const tf = (z, d) => (isWE(d) ? z.tariff.we : z.tariff.wd);
 $("#zg").innerHTML = ZONES.map(
   (z) => `
     <article class="z ${z.size === "XL" ? "XL" : z.size === "L" ? "L" : ""}" id="zc-${z.id}">
-      <div class="im">Фото: ${z.name}</div>
+      <div class="im"><img src="${z.image}" alt="${z.name}"></div>
       <div class="bd">
         <h3>${z.name}</h3>
         <p>${z.desc}</p>

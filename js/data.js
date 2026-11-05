@@ -25,6 +25,7 @@ const ZONES = [
     seats: 28,
     desc: "Основной зал для одиночной игры и игры с друзьями.",
     tariff: W(T(500, 1000, 1500, 2000, 2500), T(700, 1400, 2100, 2100, 2500)),
+    image: "img/zones/common.jpg",
   },
   {
     id: "asus",
@@ -33,6 +34,7 @@ const ZONES = [
     seats: 8,
     desc: "Отдельная зона с оборудованием ASUS.",
     tariff: W(T(700, 1500, 2000, 3800, 3800), T(1300, 2500, 3800, 3800, 3800)),
+    image: "img/zones/asus.jpg",
   },
   {
     id: "pubg",
@@ -41,6 +43,7 @@ const ZONES = [
     seats: 8,
     desc: "Зона для любителей PUBG и соревновательных игр.",
     tariff: W(T(600, 1200, 1600, 3000, 3000), T(800, 1600, 2400, 3000, 3000)),
+    image: "img/zones/pubg.jpg",
   },
   {
     id: "vip10",
@@ -49,6 +52,7 @@ const ZONES = [
     seats: 10,
     desc: "VIP-зона для тех, кто ценит комфорт.",
     tariff: W(T(700, 1500, 2000, 3200, 3400), T(1300, 2500, 3400, 3200, 3400)),
+    image: "img/zones/vip10.jpg",
   },
   {
     id: "vipsmoke",
@@ -57,6 +61,7 @@ const ZONES = [
     seats: 8,
     desc: "VIP-зона для курящих.",
     tariff: W(T(800, 1500, 2000, 3000, 3200), T(1200, 2400, 3500, 3000, 3200)),
+    image: "img/zones/vip_smoking.jpg",
   },
   {
     id: "duo",
@@ -65,6 +70,7 @@ const ZONES = [
     seats: 2,
     desc: "Комната на двоих.",
     tariff: W(T(1700, 3500, 4500, 4000, 6000), T(2000, 4000, 4800, 4000, 6000)),
+    image: "img/zones/duo.jpg",
   },
   {
     id: "squad",
@@ -73,6 +79,7 @@ const ZONES = [
     seats: 4,
     desc: "Комната для команды.",
     tariff: W(T(1200, 2000, 3200, 5000, 5000), T(1500, 3000, 4500, 5000, 5000)),
+    image: "img/zones/squad.jpg",
   },
 ];
 
