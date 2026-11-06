@@ -4,6 +4,7 @@ const CONFIG = {
   instagram: "https://www.instagram.com/brothers_oskemen",
   hours: "24/7",
   address: "Усть-Каменогорск, ул. Сагадат Нурмагамбетов, 28",
+  addressKk: "Өскемен қаласы, Сағадат Нұрмағамбетов көшесі, 28",
   lat: 49.951129,
   lon: 82.623684, 
   twoGisUrl: "https://2gis.kz/ust-kamenogorsk/geo/12807747095499387", 
@@ -20,9 +21,11 @@ const ZONES = [
   {
     id: "general",
     name: "Общий зал",
+    nameKk: "Жалпы зал",
     size: "XL",
     seats: 28,
     desc: "Основной зал для одиночной игры и игры с друзьями.",
+    descKk: "Жеке немесе достармен ойнауға арналған негізгі зал.",
     tariff: W(T(500, 1000, 1500, 2000, 2500), T(700, 1400, 2100, 2100, 2500)),
     image: "img/zones/common.jpg",
     specs: [
@@ -38,9 +41,11 @@ const ZONES = [
   {
     id: "asus",
     name: "ASUS Zone",
+    nameKk: "ASUS аймағы",
     size: "L",
     seats: 8,
     desc: "Отдельная зона с оборудованием ASUS.",
+    descKk: "ASUS жабдығы бар жеке ойын аймағы.",
     tariff: W(T(700, 1500, 2000, 3800, 3800), T(1300, 2500, 3800, 3800, 3800)),
     image: "img/zones/asus.jpg",
     specs: [
@@ -57,9 +62,11 @@ const ZONES = [
   {
     id: "pubg",
     name: "PUBG Zone",
+    nameKk: "PUBG аймағы",
     size: "L",
     seats: 8,
     desc: "Зона для любителей PUBG и соревновательных игр.",
+    descKk: "PUBG пен бәсекелі ойындарды ұнататындарға арналған аймақ.",
     tariff: W(T(600, 1200, 1600, 3000, 3000), T(800, 1600, 2400, 3000, 3000)),
     image: "img/zones/pubg.jpg",
     specs: [
@@ -75,9 +82,11 @@ const ZONES = [
   {
     id: "vip10",
     name: "VIP 10",
+    nameKk: "VIP 10",
     size: "L",
     seats: 10,
     desc: "VIP-зона для тех, кто ценит комфорт.",
+    descKk: "Жайлылықты бағалайтындарға арналған VIP-аймақ.",
     tariff: W(T(700, 1500, 2000, 3200, 3400), T(1300, 2500, 3400, 3200, 3400)),
     image: "img/zones/vip10.jpg",
     specs: [
@@ -93,9 +102,11 @@ const ZONES = [
   {
     id: "vipsmoke",
     name: "VIP Smoking",
+    nameKk: "VIP Smoking",
     size: "L",
     seats: 8,
     desc: "VIP-зона для курящих.",
+    descKk: "Темекі шегуге арналған VIP-аймақ.",
     tariff: W(T(800, 1500, 2000, 3000, 3200), T(1200, 2400, 3500, 3000, 3200)),
     image: "img/zones/vip_smoking.jpg",
     specs: [
@@ -110,9 +121,11 @@ const ZONES = [
   {
     id: "duo",
     name: "Duo-комната",
+    nameKk: "Duo бөлмесі",
     size: "L",
     seats: 2,
     desc: "Комната на двоих.",
+    descKk: "Екі адамға арналған бөлме.",
     tariff: W(T(1700, 3500, 4500, 4000, 6000), T(2000, 4000, 4800, 4000, 6000)),
     image: "img/zones/duo.jpg",
     specs: [
@@ -128,9 +141,11 @@ const ZONES = [
   {
     id: "squad",
     name: "Squad-комната",
+    nameKk: "Squad бөлмесі",
     size: "L",
     seats: 4,
     desc: "Комната для команды.",
+    descKk: "Командаға арналған бөлме.",
     tariff: W(T(1200, 2000, 3200, 5000, 5000), T(1500, 3000, 4500, 5000, 5000)),
     image: "img/zones/squad.jpg",
     specs: [

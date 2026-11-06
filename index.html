@@ -17,12 +17,18 @@
     <header>
       <div class="w">
         <a href="#top" class="logo">Brothers <b>Cyber</b> Lounge</a>
-        <button id="mb" aria-expanded="false" aria-controls="nv">Меню</button>
-        <nav id="nv" aria-label="Основная навигация">
-          <a href="#top">Главная</a><a href="#zones">Игровые зоны</a
-          ><a href="#prices">Цены</a><a href="#contacts">Контакты</a>
-          <a class="btn sm" href="#bk">Забронировать</a>
+        <nav id="nv" aria-label="Основная навигация" data-i18n-aria="navLabel">
+          <a href="#top" data-i18n="home">Главная</a><a href="#zones" data-i18n="zones">Игровые зоны</a
+          ><a href="#prices" data-i18n="prices">Цены</a><a href="#contacts" data-i18n="contacts">Контакты</a>
+          <a class="btn sm" href="#bk" data-i18n="book">Забронировать</a>
         </nav>
+        <div class="header-actions">
+          <div class="lang-switch" role="group" aria-label="Язык страницы" data-i18n-aria="languageSelector">
+            <button type="button" data-lang="ru" aria-pressed="true" data-i18n-aria="russian">РУС</button>
+            <button type="button" data-lang="kk" aria-pressed="false" data-i18n-aria="kazakh">ҚАЗ</button>
+          </div>
+          <button id="mb" aria-expanded="false" aria-controls="nv" data-i18n="menu">Меню</button>
+        </div>
       </div>
     </header>
 
@@ -31,22 +37,22 @@
         <div class="ph"></div>
         <div class="w">
           <h1>Brothers<br /><i>Cyber</i> Lounge</h1>
-          <p class="t">Твоя игра. Твоя команда. Твоя территория.</p>
-          <p class="m">
+          <p class="t" data-i18n="heroTagline">Твоя игра. Твоя команда. Твоя территория.</p>
+          <p class="m" data-i18n="heroDescription">
             Игровые зоны, комфортные места и атмосфера, ради которой хочется
             возвращаться.
           </p>
           <div class="bt">
-            <a class="btn" href="#bk">Забронировать место</a
-            ><a class="btn s" href="#zones">Посмотреть игровые зоны</a>
+            <a class="btn" href="#bk" data-i18n="bookPlace">Забронировать место</a
+            ><a class="btn s" href="#zones" data-i18n="viewZones">Посмотреть игровые зоны</a>
           </div>
         </div>
       </section>
 
       <section id="zones">
         <div class="w rv">
-          <h2>Игровые зоны</h2>
-          <p class="lead">
+          <h2 data-i18n="zones">Игровые зоны</h2>
+          <p class="lead" data-i18n="zonesDescription">
             Выберите формат: общий зал для одиночной игры, VIP для комфорта или
             отдельная комната для команды.
           </p>
@@ -56,54 +62,54 @@
 
       <section id="bk">
         <div class="w rv">
-          <h2>Бронирование</h2>
-          <p class="lead">
+          <h2 data-i18n="booking">Бронирование</h2>
+          <p class="lead" data-i18n="bookingDescription">
             Соберите заявку — мы подготовим сообщение в WhatsApp. Бронь
             подтверждает администратор клуба.</p>
-          <p class="lead">Напомним что бронь держится 15 минут</p>
+          <p class="lead" data-i18n="bookingHold">Напомним что бронь держится 15 минут</p>
           <div class="bkg">
             <form id="bf" novalidate>
               <fieldset>
-                <legend>1. Зона</legend>
+                <legend data-i18n="zoneStep">1. Зона</legend>
                 <div class="row" id="bz" role="group"></div>
               </fieldset>
               <fieldset>
-                <legend>2. День</legend>
+                <legend data-i18n="dayStep">2. День</legend>
                 <div class="row" id="bday" role="group"></div>
               </fieldset>
               <fieldset>
-                <legend>3. Время начала</legend>
+                <legend data-i18n="startTimeStep">3. Время начала</legend>
                 <div class="slots" id="btime" role="group"></div>
               </fieldset>
               <fieldset>
-                <legend>4. Тариф</legend>
+                <legend data-i18n="tariffStep">4. Тариф</legend>
                 <div class="row" id="bpk" role="group"></div>
               </fieldset>
               <fieldset>
-                <legend>5. Количество компьютеров</legend>
+                <legend data-i18n="computerCountStep">5. Количество компьютеров</legend>
                 <div class="qty-wrap">
                   <div class="qty">
-                    <button type="button" id="qm" aria-label="Меньше">−</button
+                    <button type="button" id="qm" aria-label="Меньше" data-i18n-aria="less">−</button
                     ><output id="qn" aria-live="polite">1</output
-                    ><button type="button" id="qp" aria-label="Больше">
+                    ><button type="button" id="qp" aria-label="Больше" data-i18n-aria="more">
                       +
                     </button>
                   </div>
                   <label class="check-inline" for="pc-nearby">
                     <input id="pc-nearby" type="checkbox" />
-                    <span>ПК рядом</span>
+                    <span data-i18n="nearbyPc">ПК рядом</span>
                   </label>
                 </div>
               </fieldset>
               <fieldset>
-                <legend>6. Контакты</legend>
+                <legend data-i18n="contactStep">6. Контакты</legend>
                 <div class="g2">
                   <div>
-                    <label for="nm">Имя</label
+                    <label for="nm" data-i18n="name">Имя</label
                     ><input id="nm" autocomplete="name" required />
                   </div>
                   <div>
-                    <label for="ph">Телефон</label>
+                    <label for="ph" data-i18n="phone">Телефон</label>
                     <div class="pf">
                       <span>+7</span
                       ><input
@@ -118,38 +124,39 @@
                   </div>
                 </div>
                 <div class="comment-field">
-                  <label for="comment">Комментарий (необязательно)</label>
+                  <label for="comment" data-i18n="comment">Комментарий (необязательно)</label>
                   <textarea
                     id="comment"
                     rows="4"
                     maxlength="250"
                     placeholder="Например, пожелания по бронированию"
+                    data-i18n-placeholder="commentPlaceholder"
                   ></textarea>
                 </div>
                 <div class="err" id="er" role="alert"></div>
               </fieldset>
             </form>
             <aside class="sum" aria-live="polite">
-              <h3>Ваша заявка</h3>
+              <h3 data-i18n="yourRequest">Ваша заявка</h3>
               <dl>
-                <dt>Зона</dt>
+                <dt data-i18n="zone">Зона</dt>
                 <dd id="s1">—</dd>
-                <dt>Дата</dt>
+                <dt data-i18n="date">Дата</dt>
                 <dd id="s2">—</dd>
-                <dt>Время</dt>
+                <dt data-i18n="time">Время</dt>
                 <dd id="s3">—</dd>
-                <dt>Тариф</dt>
+                <dt data-i18n="tariff">Тариф</dt>
                 <dd id="s4">—</dd>
-                <dt>Компьютеры</dt>
+                <dt data-i18n="computers">Компьютеры</dt>
                 <dd id="s5">—</dd>
-                <dt>ПК рядом</dt>
+                <dt data-i18n="nearbyPc">ПК рядом</dt>
                 <dd id="s8">Нет</dd>
               </dl>
               <div class="tot" id="s6">—</div>
               <small id="s7">Предварительная стоимость</small>
-              <small id="s7">Цены на сайте носят информационный характер и не являются публичной офертой.</small>
-              <small id="s7">Нажимая отправить вы соглашаетесь с обработкой персональных данных</small>
-              <button class="btn" id="send" type="button" style="width: 100%">
+              <small data-i18n="priceDisclaimer">Цены на сайте носят информационный характер и не являются публичной офертой.</small>
+              <small data-i18n="personalDataConsent">Нажимая отправить вы соглашаетесь с обработкой персональных данных</small>
+              <button class="btn" id="send" type="button" style="width: 100%" data-i18n="sendWhatsapp">
                 Отправить заявку в WhatsApp
               </button>
             </aside>
@@ -159,8 +166,8 @@
 
       <section id="prices">
         <div class="w rv">
-          <h2>Цены</h2>
-          <p class="lead">
+          <h2 data-i18n="prices">Цены</h2>
+          <p class="lead" data-i18n="pricesDescription">
             Стоимость в тенге (₸). Будни и выходные — по прайс-листу клуба.
             «День» — с 10:00 до 18:00.<br />
             «Ночь» — с 22:00 до 10:00.
@@ -169,9 +176,9 @@
             <table>
               <thead>
                 <tr>
-                  <th>Зона</th>
-                  <th>Будни</th>
-                  <th>Выходные</th>
+                  <th data-i18n="zone">Зона</th>
+                  <th data-i18n="weekdays">Будни</th>
+                  <th data-i18n="weekends">Выходные</th>
                   <th></th>
                 </tr>
               </thead>
@@ -185,32 +192,32 @@
       <section>
         <div class="w rv adv">
           <div>
-            <h2>Что внутри</h2>
-            <p class="lead" style="margin: 0">
+            <h2 data-i18n="inside">Что внутри</h2>
+            <p class="lead" style="margin: 0" data-i18n="insideDescription">
               Всё, что нужно для долгой игры.
             </p>
           </div>
           <ul>
-            <li>Топовое железо</li>
-            <li>Премиальная периферия</li>
-            <li>Мониторы 360 Гц</li>
-            <li>Удобные игровые кресла</li>
-            <li>Быстрый интернет</li>
-            <li>Мощное охлаждение</li>
+            <li data-i18n="featureHardware">Топовое железо</li>
+            <li data-i18n="featurePeripherals">Премиальная периферия</li>
+            <li data-i18n="featureMonitors">Мониторы 360 Гц</li>
+            <li data-i18n="featureChairs">Удобные игровые кресла</li>
+            <li data-i18n="featureInternet">Быстрый интернет</li>
+            <li data-i18n="featureCooling">Мощное охлаждение</li>
           </ul>
         </div>
       </section>
 
       <section id="map">
         <div class="w rv">
-          <h2>Как нас найти</h2>
+          <h2 data-i18n="findUs">Как нас найти</h2>
           <p class="lead" id="ad"></p>
           <div class="map" id="mp"></div>
           <div class="row">
             <a class="btn" id="rt" target="_blank" rel="noopener"
-              >Построить маршрут</a
+              data-i18n="buildRoute">Построить маршрут</a
             ><a class="btn s" id="o2" target="_blank" rel="noopener"
-              >Открыть в 2GIS</a
+              data-i18n="open2gis">Открыть в 2GIS</a
             >
           </div>
         </div>
@@ -218,9 +225,9 @@
 
       <section id="contacts">
         <div class="w rv">
-          <h2>Контакты</h2>
+          <h2 data-i18n="contacts">Контакты</h2>
           <dl class="cg" id="cg"></dl>
-          <a class="btn" href="#bk">Забронировать место</a>
+          <a class="btn" href="#bk" data-i18n="bookPlace">Забронировать место</a>
         </div>
       </section>
     </main>
@@ -229,8 +236,8 @@
       <div class="w">
         <span class="logo">Brothers <b>Cyber</b> Club</span>
         <nav>
-          <a href="#zones">Зоны</a><a href="#prices">Цены</a
-          ><a href="#contacts">Контакты</a>
+          <a href="#zones" data-i18n="zonesShort">Зоны</a><a href="#prices" data-i18n="prices">Цены</a
+          ><a href="#contacts" data-i18n="contacts">Контакты</a>
         </nav>
         <span>© <span id="yr"></span> Brothers Cyber Club</span>
       </div>

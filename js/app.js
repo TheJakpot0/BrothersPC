@@ -1,7 +1,153 @@
 const $ = (s) => document.querySelector(s);
 const zn = (id) => ZONES.find((z) => z.id === id);
+const translations = {
+  ru: {
+    menu: "Меню", home: "Главная", zones: "Игровые зоны", zonesShort: "Зоны",
+    prices: "Цены", contacts: "Контакты", book: "Забронировать",
+    heroTagline: "Твоя игра. Твоя команда. Твоя территория.",
+    heroDescription: "Игровые зоны, комфортные места и атмосфера, ради которой хочется возвращаться.",
+    bookPlace: "Забронировать место", viewZones: "Посмотреть игровые зоны",
+    zonesDescription: "Выберите формат: общий зал для одиночной игры, VIP для комфорта или отдельная комната для команды.",
+    booking: "Бронирование",
+    bookingDescription: "Соберите заявку — мы подготовим сообщение в WhatsApp. Бронь подтверждает администратор клуба.",
+    bookingHold: "Напомним что бронь держится 15 минут",
+    zoneStep: "1. Зона", dayStep: "2. День", startTimeStep: "3. Время начала",
+    tariffStep: "4. Тариф", computerCountStep: "5. Количество компьютеров",
+    less: "Меньше", more: "Больше", nearbyPc: "ПК рядом", contactStep: "6. Контакты",
+    name: "Имя", phone: "Телефон", comment: "Комментарий (необязательно)",
+    commentPlaceholder: "Например, пожелания по бронированию",
+    yourRequest: "Ваша заявка", zone: "Зона", date: "Дата", time: "Время",
+    tariff: "Тариф", computers: "Компьютеры", sendWhatsapp: "Отправить заявку в WhatsApp",
+    priceDisclaimer: "Цены на сайте носят информационный характер и не являются публичной офертой.",
+    personalDataConsent: "Нажимая отправить вы соглашаетесь с обработкой персональных данных",
+    pricesDescription: "Стоимость в тенге (₸). Будни и выходные — по прайс-листу клуба. «День» — с 10:00 до 18:00. «Ночь» — с 22:00 до 10:00.",
+    hour1: "1 час", hour3: "3 часа", hour5: "5 часов",
+    weekdays: "Будни", weekends: "Выходные", inside: "Что внутри",
+    insideDescription: "Всё, что нужно для долгой игры.",
+    featureHardware: "Топовое железо", featurePeripherals: "Премиальная периферия",
+    featureMonitors: "Мониторы 360 Гц", featureChairs: "Удобные игровые кресла",
+    featureInternet: "Быстрый интернет", featureCooling: "Мощное охлаждение",
+    findUs: "Как нас найти", buildRoute: "Построить маршрут", open2gis: "Открыть в 2GIS",
+    navLabel: "Основная навигация", languageSelector: "Язык страницы",
+    russian: "Русский язык", kazakh: "Казахский язык",
+    today: "Сегодня", tomorrow: "Завтра",
+    weekend: "выходной", weekday: "будни", hide: "Скрыть", specs: "Характеристики",
+    pcCount: "ПК", seatsUnknown: "Мест: уточняется",
+    weekdaysShort: "Будни", weekendsShort: "Выходные",
+    day: "День", night: "Ночь", dayHours: "День (10:00–18:00)", nightHours: "Ночь (22:00–10:00)",
+    nearbyUnavailable: "Доступно при выборе двух или более ПК",
+    chooseNearby: "Выбрать ПК рядом", minPc: "Минимум 1 ПК",
+    decreasePc: "Уменьшить количество ПК", maxPc: (n) => `Максимум для зоны: ${n} ПК`,
+    addPc: (n) => `Добавить ПК (до ${n})`, yes: "Да", no: "Нет",
+    onRequest: "По запросу", chooseZonePrice: "Выберите зону — покажем стоимость",
+    priceMissing: "Цена не внесена — стоимость уточнит администратор",
+    accordingToPrice: (day, count) => `По прайс-листу (${day})${count > 1 ? `, ${count} ПК` : ""}`,
+    missingFields: (fields) => `Выберите/заполните: ${fields.join(", ")}.`,
+    missingZone: "зону", missingStartTime: "время начала", missingName: "имя",
+    missingPhone: "телефон (10 цифр после +7)",
+    whatsappGreeting: "Здравствуйте! Хочу забронировать место в Brothers Cyber Lounge.",
+    zoneLabel: "Зона", dateLabel: "Дата", timeLabel: "Время", tariffLabel: "Тариф",
+    computerCountLabel: "Количество компьютеров", nearbyLabel: "ПК рядом",
+    phoneLabel: "Телефон", commentLabel: "Комментарий:",
+    addressLabel: "Адрес", whatsappLabel: "WhatsApp", instagramLabel: "Instagram",
+    hoursLabel: "График работы", addedSoon: "Будет добавлено",
+    addressSoon: "Адрес клуба будет добавлен.", addressFallback: "Адрес будет добавлен",
+    openClub2gis: "Откройте клуб в 2GIS кнопкой ниже.", mapTitle: "Карта",
+    processor: "Процессор", graphicsCard: "Видеокарта", ram: "ОЗУ",
+    monitor: "Монитор", keyboard: "Клавиатура", mouse: "Мышь", headphones: "Наушники",
+    specPending: "Уточняется",
+  },
+  kk: {
+    menu: "Мәзір", home: "Басты бет", zones: "Ойын аймақтары", zonesShort: "Аймақтар",
+    prices: "Бағалар", contacts: "Байланыс", book: "Брондау",
+    heroTagline: "Сенің ойының. Сенің командаң. Сенің аумағың.",
+    heroDescription: "Ойын аймақтары, жайлы орындар және қайта оралғың келетін ерекше атмосфера.",
+    bookPlace: "Орынды брондау", viewZones: "Ойын аймақтарын көру",
+    zonesDescription: "Форматты таңдаңыз: жеке ойнауға арналған жалпы зал, жайлылыққа арналған VIP-аймақ немесе командаға арналған жеке бөлме.",
+    booking: "Брондау",
+    bookingDescription: "Өтінім қалдырыңыз — біз WhatsApp хабарламасын дайындаймыз. Броньды клуб әкімшісі растайды.",
+    bookingHold: "Ескерту: бронь 15 минут сақталады",
+    zoneStep: "1. Аймақ", dayStep: "2. Күн", startTimeStep: "3. Басталу уақыты",
+    tariffStep: "4. Тариф", computerCountStep: "5. Компьютер саны",
+    less: "Азайту", more: "Көбейту", nearbyPc: "Қатар тұрған ПК", contactStep: "6. Байланыс деректері",
+    name: "Аты", phone: "Телефон", comment: "Түсініктеме (міндетті емес)",
+    commentPlaceholder: "Мысалы, брондау бойынша тілектеріңіз",
+    yourRequest: "Сіздің өтініміңіз", zone: "Аймақ", date: "Күні", time: "Уақыты",
+    tariff: "Тариф", computers: "Компьютерлер", sendWhatsapp: "WhatsApp-қа өтінім жіберу",
+    priceDisclaimer: "Сайттағы бағалар ақпараттық сипатта берілген және жария оферта болып табылмайды.",
+    personalDataConsent: "Жіберу батырмасын басу арқылы дербес деректеріңізді өңдеуге келісесіз",
+    pricesDescription: "Бағалар теңгемен (₸). Жұмыс және демалыс күндерінің бағасы клуб прайс-парағына сай. «Күндіз» — 10:00–18:00. «Түнде» — 22:00–10:00.",
+    hour1: "1 сағат", hour3: "3 сағат", hour5: "5 сағат",
+    weekdays: "Жұмыс күндері", weekends: "Демалыс күндері", inside: "Біздің мүмкіндіктер",
+    insideDescription: "Ұзақ ойынға қажеттінің бәрі.",
+    featureHardware: "Заманауи компьютерлер", featurePeripherals: "Премиум периферия",
+    featureMonitors: "360 Гц мониторлар", featureChairs: "Ыңғайлы ойын креслолары",
+    featureInternet: "Жылдам интернет", featureCooling: "Қуатты салқындату жүйесі",
+    findUs: "Бізді қалай табуға болады", buildRoute: "Бағыт құру", open2gis: "2GIS-те ашу",
+    navLabel: "Негізгі навигация", languageSelector: "Бет тілі",
+    russian: "Орыс тілі", kazakh: "Қазақ тілі",
+    today: "Бүгін", tomorrow: "Ертең",
+    weekend: "демалыс күні", weekday: "жұмыс күні", hide: "Жасыру", specs: "Сипаттамалары",
+    pcCount: "ПК", seatsUnknown: "Орын саны нақтылануда",
+    weekdaysShort: "Жұмыс күндері", weekendsShort: "Демалыс күндері",
+    day: "Күндіз", night: "Түнде", dayHours: "Күндіз (10:00–18:00)", nightHours: "Түнде (22:00–10:00)",
+    nearbyUnavailable: "Екі немесе одан көп ПК таңдағанда қолжетімді",
+    chooseNearby: "Қатар тұрған ПК таңдау", minPc: "Кемінде 1 ПК",
+    decreasePc: "ПК санын азайту", maxPc: (n) => "Аймақ үшін ең көбі: " + n + " ПК",
+    addPc: (n) => n + " ПК-ге дейін қосу", yes: "Иә", no: "Жоқ",
+    onRequest: "Сұраныс бойынша", chooseZonePrice: "Аймақты таңдаңыз — бағасын көрсетеміз",
+    priceMissing: "Бағасы көрсетілмеген — нақты құнын әкімші айтады",
+    accordingToPrice: (day, count) => `Прайс-парақ бойынша (${day})${count > 1 ? `, ${count} ПК` : ""}`,
+    missingFields: (fields) => `Таңдаңыз/толтырыңыз: ${fields.join(", ")}.`,
+    missingZone: "аймақты", missingStartTime: "басталу уақытын", missingName: "атыңызды",
+    missingPhone: "+7-ден кейінгі 10 таңбалы телефон нөмірін",
+    whatsappGreeting: "Сәлеметсіз бе! Brothers Cyber Lounge-тан орын брондағым келеді.",
+    zoneLabel: "Аймақ", dateLabel: "Күні", timeLabel: "Уақыты", tariffLabel: "Тариф",
+    computerCountLabel: "Компьютер саны", nearbyLabel: "Қатар тұрған ПК",
+    phoneLabel: "Телефон", commentLabel: "Түсініктеме:",
+    addressLabel: "Мекенжай", whatsappLabel: "WhatsApp", instagramLabel: "Instagram",
+    hoursLabel: "Жұмыс уақыты", addedSoon: "Жақында қосылады",
+    addressSoon: "Клубтың мекенжайы жақында қосылады.", addressFallback: "Мекенжайы жақында қосылады",
+    openClub2gis: "Төмендегі батырма арқылы клубты 2GIS-тен ашыңыз.", mapTitle: "Карта",
+    processor: "Процессор", graphicsCard: "Бейне карта", ram: "ЖЖҚ",
+    monitor: "Монитор", keyboard: "Пернетақта", mouse: "Тінтуір", headphones: "Құлаққап",
+    specPending: "Нақтылануда",
+  },
+};
+let language = localStorage.getItem("brothers-language") === "kk" ? "kk" : "ru";
+const t = (key, ...args) => {
+  const value = translations[language][key] ?? translations.ru[key];
+  return typeof value === "function" ? value(...args) : value;
+};
+const zoneName = (zone) => language === "kk" ? zone.nameKk || zone.name : zone.name;
+const zoneDescription = (zone) => language === "kk" ? zone.descKk || zone.desc : zone.desc;
+const localizedSpec = (label) => {
+  const key = {
+    Процессор: "processor", Видеокарта: "graphicsCard", ОЗУ: "ram",
+    Монитор: "monitor", Клавиатура: "keyboard", Мышь: "mouse", Наушники: "headphones",
+  }[label];
+  return key ? t(key) : label;
+};
+const localizedSpecValue = (value) => value === "Уточняется" ? t("specPending") : value;
+const applyLanguage = () => {
+  document.documentElement.lang = language;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    el.setAttribute("aria-label", t(el.dataset.i18nAria));
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    el.setAttribute("placeholder", t(el.dataset.i18nPlaceholder));
+  });
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    const active = button.dataset.lang === language;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active);
+  });
+};
 
-const fmt = (n) => (n == null ? "—" : `${n.toLocaleString("ru-RU")} ₸`);
+const fmt = (n) => (n == null ? "—" : `${n.toLocaleString(language === "kk" ? "kk-KZ" : "ru-RU")} ₸`);
 const p2 = (n) => String(n).padStart(2, "0");
 const st = { zone: null, di: 0, time: null, pack: "h1", n: 1, pcNearby: false };
 
@@ -19,37 +165,37 @@ const isWE = (d) => {
 const tf = (z, d) => (isWE(d) ? z.tariff.we : z.tariff.wd);
 
 // Зоны
-$("#zg").innerHTML = ZONES.map(
+const renderZones = () => { $("#zg").innerHTML = ZONES.map(
   (z) => `
     <article class="z ${z.size === "XL" ? "XL" : z.size === "L" ? "L" : ""}" id="zc-${z.id}">
       <div class="im">
-        <img src="${z.image}" alt="${z.name}">
+        <img src="${z.image}" alt="${zoneName(z)}">
         ${z.specs ? `
-          <button type="button" class="specs-toggle btn sm" aria-expanded="false">Характеристики</button>
-          <ul class="specs" aria-label="Характеристики компьютеров">
-            ${z.specs.map(([label, value]) => `<li><span>${label}</span><strong>${value}</strong></li>`).join("")}
+          <button type="button" class="specs-toggle btn sm" aria-expanded="false">${t("specs")}</button>
+          <ul class="specs" aria-label="${t("specs")}">
+            ${z.specs.map(([label, value]) => `<li><span>${localizedSpec(label)}</span><strong>${localizedSpecValue(value)}</strong></li>`).join("")}
           </ul>
         ` : ""}
       </div>
       <div class="bd">
-        <h3>${z.name}</h3>
-        <p>${z.desc}</p>
+        <h3>${zoneName(z)}</h3>
+        <p>${zoneDescription(z)}</p>
         <div class="ft">
-          <span>${z.seats ? `${z.seats} ПК` : "Мест: уточняется"}</span>
-          <button class="btn sm" data-z="${z.id}">Забронировать</button>
+          <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
+          <button class="btn sm" data-z="${z.id}">${t("book")}</button>
         </div>
       </div>
     </article>
   `,
-).join("");
+).join(""); };
 
 // Цены
 const cols = [
-  ["h1", "1 час"],
-  ["h3", "3 часа"],
-  ["h5", "5 часов"],
-  ["day", "День"],
-  ["night", "Ночь"],
+  ["h1", "hour1"],
+  ["h3", "hour3"],
+  ["h5", "hour5"],
+  ["day", "day"],
+  ["night", "night"],
 ];
 
 const activeTariff = isWE(new Date()) ? "we" : "wd";
@@ -60,7 +206,7 @@ const renderPriceColumn = (tariff, type, label) => `
       .map(
         ([key, name]) => `
           <div class="price-item">
-            <span>${name}</span>
+            <span>${t(name)}</span>
             <span class="${tariff[key] == null ? "na" : ""}">${fmt(tariff[key])}</span>
           </div>
         `,
@@ -73,19 +219,20 @@ const renderPricePair = (z) => {
   const we = z.tariff.we || z.tariff;
   return `
     <div class="price-pair">
-      ${renderPriceColumn(wd, "wd", "Будни")}
-      ${renderPriceColumn(we, "we", "Выходные")}
+      ${renderPriceColumn(wd, "wd", t("weekdaysShort"))}
+      ${renderPriceColumn(we, "we", t("weekendsShort"))}
     </div>
   `;
 };
 
+const renderPrices = () => {
 $("#pt").innerHTML = ZONES.map(
   (z) => `
       <tr>
-        <td class="zn">${z.name}</td>
-        <td>${renderPriceColumn(z.tariff.wd || z.tariff, "wd", "Будни")}</td>
-        <td>${renderPriceColumn(z.tariff.we || z.tariff, "we", "Выходные")}</td>
-        <td><button class="btn sm" data-z="${z.id}">Забронировать</button></td>
+        <td class="zn">${zoneName(z)}</td>
+        <td>${renderPriceColumn(z.tariff.wd || z.tariff, "wd", t("weekdaysShort"))}</td>
+        <td>${renderPriceColumn(z.tariff.we || z.tariff, "we", t("weekendsShort"))}</td>
+        <td><button class="btn sm" data-z="${z.id}">${t("book")}</button></td>
       </tr>
     `,
 ).join("");
@@ -93,20 +240,27 @@ $("#pt").innerHTML = ZONES.map(
 $("#pm").innerHTML = ZONES.map((z) => {
   return `
     <details>
-      <summary>${z.name}</summary>
+      <summary>${zoneName(z)}</summary>
       <div class="in">
         ${renderPricePair(z)}
-        <button class="btn sm" data-z="${z.id}" style="justify-self:start">Забронировать</button>
+        <button class="btn sm" data-z="${z.id}" style="justify-self:start">${t("book")}</button>
       </div>
     </details>
   `;
 }).join("");
+};
 
 // Конструктор бронирования
+const kkMonths = [
+  "қаңтар", "ақпан", "наурыз", "сәуір", "мамыр", "маусым",
+  "шілде", "тамыз", "қыркүйек", "қазан", "қараша", "желтоқсан",
+];
 const dLong = (d) =>
-  d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
+  language === "kk"
+    ? `${d.getDate()} ${kkMonths[d.getMonth()]}`
+    : d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
 const packLabel = (k) =>
-  k === "day" ? "День (10:00–18:00)" : k === "night" ? "Ночь (22:00–10:00)" : cols.find((c) => c[0] === k)[1];
+  k === "day" ? t("dayHours") : k === "night" ? t("nightHours") : t(cols.find((c) => c[0] === k)[1]);
 const toMin = (t) => +t.slice(0, 2) * 60 + +t.slice(3);
 const isPast = (t) => {
   const n = new Date();
@@ -148,17 +302,14 @@ function updateQtyControls() {
   minus.disabled = st.n <= min;
   plus.disabled = st.n >= max;
   nearby.disabled = st.n <= min;
-  nearby.title = nearby.disabled
-    ? "Доступно при выборе двух или более ПК"
-    : "Выбрать ПК рядом";
+  nearby.title = nearby.disabled ? t("nearbyUnavailable") : t("chooseNearby");
   if (nearby.disabled) {
     st.pcNearby = false;
   }
   nearby.checked = st.pcNearby;
 
-  minus.title = st.n <= min ? "Минимум 1 ПК" : "Уменьшить количество ПК";
-  plus.title =
-    st.n >= max ? `Максимум для зоны: ${max} ПК` : `Добавить ПК (до ${max})`;
+  minus.title = st.n <= min ? t("minPc") : t("decreasePc");
+  plus.title = st.n >= max ? t("maxPc", max) : t("addPc", max);
 }
 
 function renderAll() {
@@ -169,13 +320,13 @@ function renderAll() {
 
   $("#bz").innerHTML = ZONES.map(
     (z) =>
-      `<button type="button" class="chip" aria-pressed="${z.id === st.zone}" data-z="${z.id}">${z.name}</button>`,
+    `<button type="button" class="chip" aria-pressed="${z.id === st.zone}" data-z="${z.id}">${zoneName(z)}</button>`,
   ).join("");
 
   $("#bday").innerHTML = [0, 1]
     .map((i) => {
       const d = dateOf(i);
-      return `<button type="button" class="chip" aria-pressed="${st.di === i}" data-d="${i}">${i ? "Завтра" : "Сегодня"}, ${dLong(d)} (${isWE(d) ? "выходной" : "будни"})</button>`;
+      return `<button type="button" class="chip" aria-pressed="${st.di === i}" data-d="${i}">${i ? t("tomorrow") : t("today")}, ${dLong(d)} (${isWE(d) ? t("weekend") : t("weekday")})</button>`;
     })
     .join("");
 
@@ -229,20 +380,20 @@ function upd() {
   const d = dateOf(st.di);
 
   $("#qn").textContent = st.n;
-  $("#s1").textContent = z ? z.name : "—";
-  $("#s2").textContent = `${dLong(d)}, ${isWE(d) ? "выходной" : "будни"}`;
+  $("#s1").textContent = z ? zoneName(z) : "—";
+  $("#s2").textContent = `${dLong(d)}, ${isWE(d) ? t("weekend") : t("weekday")}`;
   $("#s3").textContent = st.time || "—";
   $("#s4").textContent = packLabel(st.pack);
   $("#s5").textContent = st.n;
-  $("#s8").textContent = st.pcNearby ? "Да" : "Нет";
+  $("#s8").textContent = st.pcNearby ? t("yes") : t("no");
 
   const c = cost();
-  $("#s6").textContent = !z ? "—" : c == null ? "По запросу" : fmt(c);
+  $("#s6").textContent = !z ? "—" : c == null ? t("onRequest") : fmt(c);
   $("#s7").textContent = !z
-    ? "Выберите зону — покажем стоимость"
+    ? t("chooseZonePrice")
     : c == null
-      ? "Цена не внесена — стоимость уточнит администратор"
-      : `По прайс-листу (${isWE(d) ? "выходные" : "будни"})${st.n > 1 ? `, ${st.n} ПК` : ""}`;
+      ? t("priceMissing")
+      : t("accordingToPrice", isWE(d) ? t("weekend") : t("weekday"), st.n);
 }
   
 
@@ -252,7 +403,7 @@ document.addEventListener("click", (e) => {
     const expanded = specsToggle.getAttribute("aria-expanded") !== "true";
     specsToggle.closest(".z").classList.toggle("specs-open", expanded);
     specsToggle.setAttribute("aria-expanded", expanded);
-    specsToggle.textContent = expanded ? "Скрыть" : "Характеристики";
+    specsToggle.textContent = expanded ? t("hide") : t("specs");
     return;
   }
 
@@ -324,25 +475,29 @@ $("#ph").addEventListener("input", (e) => {
     .join(" ");
 });
 
-$("#send").addEventListener("click", () => {
+const missingBookingFields = () => {
   const miss = [];
   const phone = $("#ph").value.replace(/\D/g, "");
 
   if (!st.zone) {
-    miss.push("зону");
+    miss.push(t("missingZone"));
   }
   if (!st.time) {
-    miss.push("время начала");
+    miss.push(t("missingStartTime"));
   }
   if (!$("#nm").value.trim()) {
-    miss.push("имя");
+    miss.push(t("missingName"));
   }
   if (phone.length !== 10) {
-    miss.push("телефон (10 цифр после +7)");
+    miss.push(t("missingPhone"));
   }
+  return miss;
+};
 
+$("#send").addEventListener("click", () => {
+  const miss = missingBookingFields();
   if (miss.length) {
-    $("#er").textContent = `Выберите/заполните: ${miss.join(", ")}.`;
+    $("#er").textContent = t("missingFields", miss);
     return;
   }
 
@@ -351,21 +506,21 @@ $("#send").addEventListener("click", () => {
   const c = cost();
   const comment = $("#comment").value.trim();
   const msg = [
-    "Здравствуйте! Хочу забронировать место в Brothers Cyber Lounge.",
+    t("whatsappGreeting"),
     "",
-    `Зона: ${zn(st.zone).name}`,
-    `Дата: ${$("#s2").textContent}`,
-    `Время: ${st.time}`,
-    `Тариф: ${packLabel(st.pack)}`,
-    `Количество компьютеров: ${st.n}`,
-    `ПК рядом: ${st.pcNearby ? "Да" : "Нет"}`,
+    `${t("zoneLabel")}: ${zoneName(zn(st.zone))}`,
+    `${t("dateLabel")}: ${$("#s2").textContent}`,
+    `${t("timeLabel")}: ${st.time}`,
+    `${t("tariffLabel")}: ${packLabel(st.pack)}`,
+    `${t("computerCountLabel")}: ${st.n}`,
+    `${t("nearbyLabel")}: ${st.pcNearby ? t("yes") : t("no")}`,
     //`Предварительная стоимость: ${c == null ? "уточнить" : fmt(c)}`,
     "",
-    `Имя: ${$("#nm").value.trim()}`,
-    `Телефон: +7 ${$("#ph").value}`,
+    `${t("name")}: ${$("#nm").value.trim()}`,
+    `${t("phoneLabel")}: +7 ${$("#ph").value}`,
   ];
   if (comment) {
-    msg.push("", `Комментарий:\n${comment}`);
+    msg.push("", `${t("commentLabel")}\n${comment}`);
   }
 
   window.open(
@@ -376,8 +531,9 @@ $("#send").addEventListener("click", () => {
 });
 
 // Карта и контакты
-const ph = (v) => v || "Будет добавлено";
-$("#ad").textContent = CONFIG.address || "Адрес клуба будет добавлен.";
+const ph = (v) => v || t("addedSoon");
+let address = language === "kk" ? CONFIG.addressKk || CONFIG.address : CONFIG.address;
+$("#ad").textContent = address || t("addressSoon");
 const q = encodeURIComponent("Brothers Cyber Club");
 const has = CONFIG.lat != null && CONFIG.lon != null;
 
@@ -403,10 +559,10 @@ if (has && CONFIG.twoGisKey) {
     CONFIG.lat + k / 2,
   ].join("%2C");
   $("#mp").innerHTML =
-    `<iframe title="Карта" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${CONFIG.lat}%2C${CONFIG.lon}"></iframe>`;
+    `<iframe title="${t("mapTitle")}" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${CONFIG.lat}%2C${CONFIG.lon}"></iframe>`;
 } else {
   $("#mp").innerHTML =
-    `<p>${CONFIG.address || "Адрес будет добавлен"}<br>Откройте клуб в 2GIS кнопкой ниже.</p>`;
+    `<p>${address || t("addressFallback")}<br>${t("openClub2gis")}</p>`;
 }
 
 const base = CONFIG.twoGisUrl || `https://2gis.kz/search/${q}`;
@@ -420,12 +576,21 @@ $("#rt").href = has
 $("#o2").href = CONFIG.twoGisFirmId
   ? `https://2gis.kz/firm/${CONFIG.twoGisFirmId}`
   : base;
-$("#cg").innerHTML = [
-  ["Адрес", CONFIG.address],
-  ["Телефон", CONFIG.phone],
-  ["WhatsApp", CONFIG.whatsapp && `+${CONFIG.whatsapp}`],
-  ["Instagram", CONFIG.instagram],
-  ["График работы", CONFIG.hours],
+const renderContactInfo = () => {
+  address = language === "kk" ? CONFIG.addressKk || CONFIG.address : CONFIG.address;
+  $("#ad").textContent = address || t("addressSoon");
+  if (!has) {
+    $("#mp").innerHTML = `<p>${address || t("addressFallback")}<br>${t("openClub2gis")}</p>`;
+  } else {
+    const mapFrame = $("#mp iframe");
+    if (mapFrame) mapFrame.title = t("mapTitle");
+  }
+  $("#cg").innerHTML = [
+  [t("addressLabel"), address],
+  [t("phone"), CONFIG.phone],
+  [t("whatsappLabel"), CONFIG.whatsapp && `+${CONFIG.whatsapp}`],
+  [t("instagramLabel"), CONFIG.instagram],
+  [t("hoursLabel"), CONFIG.hours],
 ]
   .map(([k, v]) => {
     const value =
@@ -435,6 +600,8 @@ $("#cg").innerHTML = [
     return `<div><dt>${k}</dt><dd class="${v ? "" : "na"}">${value}</dd></div>`;
   })
   .join("");
+};
+renderContactInfo();
 $("#yr").textContent = new Date().getFullYear();
 
 // Меню
@@ -448,6 +615,20 @@ $("#nv").onclick = (e) => {
     $("#nv").classList.remove("o");
   }
 };
+
+document.querySelector(".lang-switch").addEventListener("click", (e) => {
+  const button = e.target.closest("[data-lang]");
+  if (!button || button.dataset.lang === language) return;
+  language = button.dataset.lang;
+  localStorage.setItem("brothers-language", language);
+  applyLanguage();
+  renderZones();
+  renderPrices();
+  renderAll();
+  renderContactInfo();
+  const missing = missingBookingFields();
+  $("#er").textContent = missing.length ? t("missingFields", missing) : "";
+});
 
 // Появление
 const io = new IntersectionObserver(
@@ -463,4 +644,7 @@ const io = new IntersectionObserver(
 );
 
 document.querySelectorAll(".rv").forEach((e) => io.observe(e));
+applyLanguage();
+renderZones();
+renderPrices();
 renderAll();
