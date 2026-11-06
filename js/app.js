@@ -1,123 +1,42 @@
+const loadTranslations = async () => {
+  const languages = ["ru", "kk"];
+  const entries = await Promise.all(
+    languages.map(async (language) => {
+      const response = await fetch(`js/locales/${language}.json`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${language} translations: ${response.status}`);
+      }
+
+      const translations = await response.json();
+      if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
+        throw new Error(`Invalid ${language} translation file`);
+      }
+
+      return [language, translations];
+    }),
+  );
+  const translations = Object.fromEntries(entries);
+  const keys = Object.keys(translations.ru).sort();
+  if (
+    keys.length !== Object.keys(translations.kk).length ||
+    keys.some((key) => !Object.hasOwn(translations.kk, key)) ||
+    Object.values(translations.ru).some((value) => typeof value !== "string") ||
+    Object.values(translations.kk).some((value) => typeof value !== "string")
+  ) {
+    throw new Error("Translation files must contain matching string keys");
+  }
+
+  return translations;
+};
+
+loadTranslations().then((translations) => {
 const $ = (s) => document.querySelector(s);
 const zn = (id) => ZONES.find((z) => z.id === id);
-const translations = {
-  ru: {
-    menu: "Меню", home: "Главная", zones: "Игровые зоны", zonesShort: "Зоны",
-    prices: "Цены", contacts: "Контакты", book: "Забронировать",
-    heroTagline: "Твоя игра. Твоя команда. Твоя территория.",
-    heroDescription: "Игровые зоны, комфортные места и атмосфера, ради которой хочется возвращаться.",
-    bookPlace: "Забронировать место", viewZones: "Посмотреть игровые зоны",
-    zonesDescription: "Выберите формат: общий зал для одиночной игры, VIP для комфорта или отдельная комната для команды.",
-    booking: "Бронирование",
-    bookingDescription: "Соберите заявку — мы подготовим сообщение в WhatsApp. Бронь подтверждает администратор клуба.",
-    bookingHold: "Напомним что бронь держится 15 минут",
-    zoneStep: "1. Зона", dayStep: "2. День", startTimeStep: "3. Время начала",
-    tariffStep: "4. Тариф", computerCountStep: "5. Количество компьютеров",
-    less: "Меньше", more: "Больше", nearbyPc: "ПК рядом", contactStep: "6. Контакты",
-    name: "Имя", phone: "Телефон", comment: "Комментарий (необязательно)",
-    commentPlaceholder: "Например, пожелания по бронированию",
-    yourRequest: "Ваша заявка", zone: "Зона", date: "Дата", time: "Время",
-    tariff: "Тариф", computers: "Компьютеры", sendWhatsapp: "Отправить заявку в WhatsApp",
-    priceDisclaimer: "Цены на сайте носят информационный характер и не являются публичной офертой.",
-    personalDataConsent: "Нажимая отправить вы соглашаетесь с обработкой персональных данных",
-    pricesDescription: "Стоимость в тенге (₸). Будни и выходные — по прайс-листу клуба. «День» — с 10:00 до 18:00. «Ночь» — с 22:00 до 10:00.",
-    hour1: "1 час", hour3: "3 часа", hour5: "5 часов",
-    weekdays: "Будни", weekends: "Выходные", inside: "Что внутри",
-    insideDescription: "Всё, что нужно для долгой игры.",
-    featureHardware: "Топовое железо", featurePeripherals: "Премиальная периферия",
-    featureMonitors: "Мониторы 360 Гц", featureChairs: "Удобные игровые кресла",
-    featureInternet: "Быстрый интернет", featureCooling: "Мощное охлаждение",
-    findUs: "Как нас найти", buildRoute: "Построить маршрут", open2gis: "Открыть в 2GIS",
-    navLabel: "Основная навигация", languageSelector: "Язык страницы",
-    russian: "Русский язык", kazakh: "Казахский язык",
-    today: "Сегодня", tomorrow: "Завтра",
-    weekend: "выходной", weekday: "будни", hide: "Скрыть", specs: "Характеристики",
-    pcCount: "ПК", seatsUnknown: "Мест: уточняется",
-    weekdaysShort: "Будни", weekendsShort: "Выходные",
-    day: "День", night: "Ночь", dayHours: "День (10:00–18:00)", nightHours: "Ночь (22:00–10:00)",
-    nearbyUnavailable: "Доступно при выборе двух или более ПК",
-    chooseNearby: "Выбрать ПК рядом", minPc: "Минимум 1 ПК",
-    decreasePc: "Уменьшить количество ПК", maxPc: (n) => `Максимум для зоны: ${n} ПК`,
-    addPc: (n) => `Добавить ПК (до ${n})`, yes: "Да", no: "Нет",
-    onRequest: "По запросу", chooseZonePrice: "Выберите зону — покажем стоимость",
-    priceMissing: "Цена не внесена — стоимость уточнит администратор",
-    accordingToPrice: (day, count) => `По прайс-листу (${day})${count > 1 ? `, ${count} ПК` : ""}`,
-    missingFields: (fields) => `Выберите/заполните: ${fields.join(", ")}.`,
-    missingZone: "зону", missingStartTime: "время начала", missingName: "имя",
-    missingPhone: "телефон (10 цифр после +7)",
-    whatsappGreeting: "Здравствуйте! Хочу забронировать место в Brothers Cyber Lounge.",
-    zoneLabel: "Зона", dateLabel: "Дата", timeLabel: "Время", tariffLabel: "Тариф",
-    computerCountLabel: "Количество компьютеров", nearbyLabel: "ПК рядом",
-    phoneLabel: "Телефон", commentLabel: "Комментарий:",
-    addressLabel: "Адрес", whatsappLabel: "WhatsApp", instagramLabel: "Instagram",
-    hoursLabel: "График работы", addedSoon: "Будет добавлено",
-    addressSoon: "Адрес клуба будет добавлен.", addressFallback: "Адрес будет добавлен",
-    openClub2gis: "Откройте клуб в 2GIS кнопкой ниже.", mapTitle: "Карта",
-    processor: "Процессор", graphicsCard: "Видеокарта", ram: "ОЗУ",
-    monitor: "Монитор", keyboard: "Клавиатура", mouse: "Мышь", headphones: "Наушники",
-    specPending: "Уточняется",
-  },
-  kk: {
-    menu: "Мәзір", home: "Басты бет", zones: "Ойын аймақтары", zonesShort: "Аймақтар",
-    prices: "Бағалар", contacts: "Байланыс", book: "Брондау",
-    heroTagline: "Сенің ойының. Сенің командаң. Сенің аумағың.",
-    heroDescription: "Ойын аймақтары, жайлы орындар және қайта оралғың келетін ерекше атмосфера.",
-    bookPlace: "Орынды брондау", viewZones: "Ойын аймақтарын көру",
-    zonesDescription: "Форматты таңдаңыз: жеке ойнауға арналған жалпы зал, жайлылыққа арналған VIP-аймақ немесе командаға арналған жеке бөлме.",
-    booking: "Брондау",
-    bookingDescription: "Өтінім қалдырыңыз — біз WhatsApp хабарламасын дайындаймыз. Броньды клуб әкімшісі растайды.",
-    bookingHold: "Ескерту: бронь 15 минут сақталады",
-    zoneStep: "1. Аймақ", dayStep: "2. Күн", startTimeStep: "3. Басталу уақыты",
-    tariffStep: "4. Тариф", computerCountStep: "5. Компьютер саны",
-    less: "Азайту", more: "Көбейту", nearbyPc: "Қатар тұрған ПК", contactStep: "6. Байланыс деректері",
-    name: "Аты", phone: "Телефон", comment: "Түсініктеме (міндетті емес)",
-    commentPlaceholder: "Мысалы, брондау бойынша тілектеріңіз",
-    yourRequest: "Сіздің өтініміңіз", zone: "Аймақ", date: "Күні", time: "Уақыты",
-    tariff: "Тариф", computers: "Компьютерлер", sendWhatsapp: "WhatsApp-қа өтінім жіберу",
-    priceDisclaimer: "Сайттағы бағалар ақпараттық сипатта берілген және жария оферта болып табылмайды.",
-    personalDataConsent: "Жіберу батырмасын басу арқылы дербес деректеріңізді өңдеуге келісесіз",
-    pricesDescription: "Бағалар теңгемен (₸). Жұмыс және демалыс күндерінің бағасы клуб прайс-парағына сай. «Күндіз» — 10:00–18:00. «Түнде» — 22:00–10:00.",
-    hour1: "1 сағат", hour3: "3 сағат", hour5: "5 сағат",
-    weekdays: "Жұмыс күндері", weekends: "Демалыс күндері", inside: "Біздің мүмкіндіктер",
-    insideDescription: "Ұзақ ойынға қажеттінің бәрі.",
-    featureHardware: "Заманауи компьютерлер", featurePeripherals: "Премиум периферия",
-    featureMonitors: "360 Гц мониторлар", featureChairs: "Ыңғайлы ойын креслолары",
-    featureInternet: "Жылдам интернет", featureCooling: "Қуатты салқындату жүйесі",
-    findUs: "Бізді қалай табуға болады", buildRoute: "Бағыт құру", open2gis: "2GIS-те ашу",
-    navLabel: "Негізгі навигация", languageSelector: "Бет тілі",
-    russian: "Орыс тілі", kazakh: "Қазақ тілі",
-    today: "Бүгін", tomorrow: "Ертең",
-    weekend: "демалыс күні", weekday: "жұмыс күні", hide: "Жасыру", specs: "Сипаттамалары",
-    pcCount: "ПК", seatsUnknown: "Орын саны нақтылануда",
-    weekdaysShort: "Жұмыс күндері", weekendsShort: "Демалыс күндері",
-    day: "Күндіз", night: "Түнде", dayHours: "Күндіз (10:00–18:00)", nightHours: "Түнде (22:00–10:00)",
-    nearbyUnavailable: "Екі немесе одан көп ПК таңдағанда қолжетімді",
-    chooseNearby: "Қатар тұрған ПК таңдау", minPc: "Кемінде 1 ПК",
-    decreasePc: "ПК санын азайту", maxPc: (n) => "Аймақ үшін ең көбі: " + n + " ПК",
-    addPc: (n) => n + " ПК-ге дейін қосу", yes: "Иә", no: "Жоқ",
-    onRequest: "Сұраныс бойынша", chooseZonePrice: "Аймақты таңдаңыз — бағасын көрсетеміз",
-    priceMissing: "Бағасы көрсетілмеген — нақты құнын әкімші айтады",
-    accordingToPrice: (day, count) => `Прайс-парақ бойынша (${day})${count > 1 ? `, ${count} ПК` : ""}`,
-    missingFields: (fields) => `Таңдаңыз/толтырыңыз: ${fields.join(", ")}.`,
-    missingZone: "аймақты", missingStartTime: "басталу уақытын", missingName: "атыңызды",
-    missingPhone: "+7-ден кейінгі 10 таңбалы телефон нөмірін",
-    whatsappGreeting: "Сәлеметсіз бе! Brothers Cyber Lounge-тан орын брондағым келеді.",
-    zoneLabel: "Аймақ", dateLabel: "Күні", timeLabel: "Уақыты", tariffLabel: "Тариф",
-    computerCountLabel: "Компьютер саны", nearbyLabel: "Қатар тұрған ПК",
-    phoneLabel: "Телефон", commentLabel: "Түсініктеме:",
-    addressLabel: "Мекенжай", whatsappLabel: "WhatsApp", instagramLabel: "Instagram",
-    hoursLabel: "Жұмыс уақыты", addedSoon: "Жақында қосылады",
-    addressSoon: "Клубтың мекенжайы жақында қосылады.", addressFallback: "Мекенжайы жақында қосылады",
-    openClub2gis: "Төмендегі батырма арқылы клубты 2GIS-тен ашыңыз.", mapTitle: "Карта",
-    processor: "Процессор", graphicsCard: "Бейне карта", ram: "ЖЖҚ",
-    monitor: "Монитор", keyboard: "Пернетақта", mouse: "Тінтуір", headphones: "Құлаққап",
-    specPending: "Нақтылануда",
-  },
-};
 let language = localStorage.getItem("brothers-language") === "kk" ? "kk" : "ru";
 const t = (key, ...args) => {
-  const value = translations[language][key] ?? translations.ru[key];
-  return typeof value === "function" ? value(...args) : value;
+  return translations[language][key].replace(/\{(\d+)\}/g, (placeholder, index) =>
+    args[index] === undefined ? placeholder : args[index],
+  );
 };
 const zoneName = (zone) => language === "kk" ? zone.nameKk || zone.name : zone.name;
 const zoneDescription = (zone) => language === "kk" ? zone.descKk || zone.desc : zone.desc;
@@ -393,7 +312,11 @@ function upd() {
     ? t("chooseZonePrice")
     : c == null
       ? t("priceMissing")
-      : t("accordingToPrice", isWE(d) ? t("weekend") : t("weekday"), st.n);
+      : t(
+          "accordingToPrice",
+          isWE(d) ? t("weekend") : t("weekday"),
+          st.n > 1 ? `, ${st.n} ${t("pcCount")}` : "",
+        );
 }
   
 
@@ -497,7 +420,7 @@ const missingBookingFields = () => {
 $("#send").addEventListener("click", () => {
   const miss = missingBookingFields();
   if (miss.length) {
-    $("#er").textContent = t("missingFields", miss);
+    $("#er").textContent = t("missingFields", miss.join(", "));
     return;
   }
 
@@ -627,7 +550,7 @@ document.querySelector(".lang-switch").addEventListener("click", (e) => {
   renderAll();
   renderContactInfo();
   const missing = missingBookingFields();
-  $("#er").textContent = missing.length ? t("missingFields", missing) : "";
+  $("#er").textContent = missing.length ? t("missingFields", missing.join(", ")) : "";
 });
 
 // Появление
@@ -648,3 +571,11 @@ applyLanguage();
 renderZones();
 renderPrices();
 renderAll();
+}).catch((error) => {
+  console.error("Could not initialize page translations.", error);
+  const message = document.createElement("main");
+  message.setAttribute("role", "alert");
+  message.textContent =
+    "Не удалось загрузить переводы. Откройте сайт через веб-сервер и проверьте файлы js/locales/ru.json и js/locales/kk.json.";
+  document.body.replaceChildren(message);
+});
