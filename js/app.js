@@ -52,64 +52,50 @@ const cols = [
   ["night", "Ночь"],
 ];
 
-const rowsT = [];
-ZONES.forEach((z) => {
-  if (z.tariff.wd) {
-    [
-      ["wd", "Будни"],
-      ["we", "Выходные"],
-    ].forEach(([k, l], i) => {
-      rowsT.push({ z, t: z.tariff[k], sub: l, first: i === 0 });
-    });
-  } else {
-    rowsT.push({ z, t: z.tariff, sub: "", first: true });
-  }
-});
+const activeTariff = isWE(new Date()) ? "we" : "wd";
+const renderPriceColumn = (tariff, type, label) => `
+  <div class="price-column ${activeTariff === type ? "active" : ""}">
+    <strong>${label}</strong>
+    ${cols
+      .map(
+        ([key, name]) => `
+          <div class="price-item">
+            <span>${name}</span>
+            <span class="${tariff[key] == null ? "na" : ""}">${fmt(tariff[key])}</span>
+          </div>
+        `,
+      )
+      .join("")}
+  </div>
+`;
+const renderPricePair = (z) => {
+  const wd = z.tariff.wd || z.tariff;
+  const we = z.tariff.we || z.tariff;
+  return `
+    <div class="price-pair">
+      ${renderPriceColumn(wd, "wd", "Будни")}
+      ${renderPriceColumn(we, "we", "Выходные")}
+    </div>
+  `;
+};
 
-$("#pt").innerHTML = rowsT
-  .map(
-    (r) => `
+$("#pt").innerHTML = ZONES.map(
+  (z) => `
       <tr>
-        <td class="zn">${r.z.name}${r.sub ? `<small>${r.sub}</small>` : ""}</td>
-        ${cols
-          .map(
-            (c) =>
-              `<td class="${r.t[c[0]] == null ? "na" : ""}">${fmt(r.t[c[0]])}</td>`,
-          )
-          .join("")}
-        <td>${r.first ? `<button class="btn sm" data-z="${r.z.id}">Забронировать</button>` : ""}</td>
+        <td class="zn">${z.name}</td>
+        <td>${renderPriceColumn(z.tariff.wd || z.tariff, "wd", "Будни")}</td>
+        <td>${renderPriceColumn(z.tariff.we || z.tariff, "we", "Выходные")}</td>
+        <td><button class="btn sm" data-z="${z.id}">Забронировать</button></td>
       </tr>
     `,
-  )
-  .join("");
+).join("");
 
 $("#pm").innerHTML = ZONES.map((z) => {
-  const blocks = z.tariff.wd
-    ? [
-        ["Будни", z.tariff.wd],
-        ["Выходные", z.tariff.we],
-      ]
-    : [["", z.tariff]];
-
   return `
     <details>
       <summary>${z.name}</summary>
       <div class="in">
-        ${blocks
-          .map(
-            ([l, t]) =>
-              `${l ? `<strong>${l}</strong>` : ""}${cols
-                .map(
-                  (c) => `
-                    <div>
-                      <span class="na">${c[1]}</span>
-                      <span>${fmt(t[c[0]])}</span>
-                    </div>
-                  `,
-                )
-                .join("")}`,
-          )
-          .join("")}
+        ${renderPricePair(z)}
         <button class="btn sm" data-z="${z.id}" style="justify-self:start">Забронировать</button>
       </div>
     </details>
@@ -373,7 +359,7 @@ $("#send").addEventListener("click", () => {
     `Тариф: ${packLabel(st.pack)}`,
     `Количество компьютеров: ${st.n}`,
     `ПК рядом: ${st.pcNearby ? "Да" : "Нет"}`,
-    `Предварительная стоимость: ${c == null ? "уточнить" : fmt(c)}`,
+    //`Предварительная стоимость: ${c == null ? "уточнить" : fmt(c)}`,
     "",
     `Имя: ${$("#nm").value.trim()}`,
     `Телефон: +7 ${$("#ph").value}`,
