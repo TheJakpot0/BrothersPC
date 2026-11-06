@@ -307,6 +307,9 @@ nav a:hover {
   color: #090a0d;
   font-weight: 600;
 }
+.z .specs-toggle {
+  display: none;
+}
 @media (hover: hover) and (pointer: fine) {
   .z .specs {
     opacity: 0;
@@ -319,6 +322,47 @@ nav a:hover {
   .z:focus-within .specs {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  .z .specs-toggle {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    left: 10px;
+    display: block;
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+  .z .specs {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    display: none;
+    max-width: calc(100% - 20px);
+    gap: 2px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .z.specs-open .specs {
+    display: grid;
+  }
+  .z.specs-open .im {
+    min-height: 190px;
+    aspect-ratio: auto;
+  }
+  .z .specs li {
+    width: 100%;
+    min-width: 0;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2px 6px;
+    padding: 3px 6px;
+    overflow-wrap: anywhere;
+  }
+  .z .specs li strong {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 .z:hover .im img {

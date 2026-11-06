@@ -25,6 +25,7 @@ $("#zg").innerHTML = ZONES.map(
       <div class="im">
         <img src="${z.image}" alt="${z.name}">
         ${z.specs ? `
+          <button type="button" class="specs-toggle btn sm" aria-expanded="false">Характеристики</button>
           <ul class="specs" aria-label="Характеристики компьютеров">
             ${z.specs.map(([label, value]) => `<li><span>${label}</span><strong>${value}</strong></li>`).join("")}
           </ul>
@@ -260,6 +261,15 @@ function upd() {
   
 
 document.addEventListener("click", (e) => {
+  const specsToggle = e.target.closest(".specs-toggle");
+  if (specsToggle) {
+    const expanded = specsToggle.getAttribute("aria-expanded") !== "true";
+    specsToggle.closest(".z").classList.toggle("specs-open", expanded);
+    specsToggle.setAttribute("aria-expanded", expanded);
+    specsToggle.textContent = expanded ? "Скрыть" : "Характеристики";
+    return;
+  }
+
   const b = e.target.closest("[data-z],[data-d],[data-t],[data-k]");
   if (!b) {
     return;
