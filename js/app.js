@@ -13,7 +13,7 @@ const dateOf = (i) => {
 
 const isWE = (d) => {
   const g = d.getDay();
-  return g === 0 || g === 6;
+  return g === 0 || g===5 || g === 6;
 }; // выходные: сб и вс (при необходимости добавьте пятницу)
 
 const tf = (z, d) => (isWE(d) ? z.tariff.we : z.tariff.wd);
