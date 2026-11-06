@@ -276,7 +276,7 @@ nav a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(9, 10, 13, 0.484);
+  background: rgba(9, 10, 13, 0);
   pointer-events: none;
   transition: background 0.3s ease;
 }
