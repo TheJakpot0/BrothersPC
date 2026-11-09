@@ -291,36 +291,34 @@ nav a:hover {
 }
 .zg {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 .z {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 16px;
+}
+.z-info,
+.z-specs {
+  min-width: 0;
   background: var(--panel);
   border: 1px solid var(--ln);
-  display: flex;
-  flex-direction: column;
-  grid-column: span 2;
 }
-.z.L {
-  grid-column: span 3;
-}
-.z.XL {
-  grid-column: span 4;
+.z-info {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
 }
 .z .im {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16/8;
+  min-height: 100%;
+  aspect-ratio: 4/3;
   background: repeating-linear-gradient(
     135deg,
     #101217 0 12px,
     #13151a 12px 24px
   );
-  display: flex;
-  align-items: flex-end;
-  padding: 10px;
-  font-size: 12px;
-  color: var(--mu);
 }
 .z .im img {
   position: absolute;
@@ -332,103 +330,47 @@ nav a:hover {
   object-position: center;
   transition: transform 0.3s ease;
 }
-.z .im::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(9, 10, 13, 0);
-  pointer-events: none;
-  transition: background 0.3s ease;
-}
 .z .specs {
-  position: absolute;
-  z-index: 1;
-  left: 12px;
-  bottom: 10px;
   display: grid;
-  gap: 3px;
+  gap: 6px;
   padding: 0;
   list-style: none;
-  color: #090a0d;
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.35;
 }
 .z .specs li {
-  display: flex;
-  gap: 4px;
-  width: max-content;
-  padding: 3px 7px;
-  background: rgba(245, 211, 61, 0.92);
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  background: var(--bg);
+  border: 1px solid var(--ln);
+  border-left: 2px solid var(--y);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.z .specs li span {
+  color: var(--mu);
 }
 .z .specs strong {
-  color: #090a0d;
+  color: var(--y);
   font-weight: 600;
 }
-.z .specs-toggle {
-  display: none;
+.z-specs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+}
+.z .specs-title {
+  color: var(--y);
+  font: 700 18px Oswald, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
 }
 @media (hover: hover) and (pointer: fine) {
-  .z:hover .im::after {
-    background: rgba(9, 10, 13, 0.826);
-  }
   .z:hover .im img {
     transform: scale(1.04);
-  }
-  .z .specs {
-    opacity: 0;
-    transform: translateY(110%);
-    transition:
-      opacity 0.25s ease,
-      transform 0.3s ease;
-  }
-  .z:hover .specs,
-  .z:focus-within .specs {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@media (max-width: 700px), (hover: none) and (pointer: coarse) {
-  .z .specs-toggle {
-    position: absolute;
-    z-index: 2;
-    top: 10px;
-    left: 10px;
-    display: block;
-    padding: 6px 9px;
-    font-size: 11px;
-  }
-  .z .specs {
-    right: 10px;
-    bottom: 10px;
-    left: 10px;
-    display: none;
-    max-width: calc(100% - 20px);
-    gap: 2px;
-    font-size: 10px;
-    line-height: 1.25;
-  }
-  .z.specs-open .specs {
-    display: grid;
-  }
-  .z.specs-open .im::after {
-    background: rgba(9, 10, 13, 0.55);
-  }
-  .z.specs-open .im {
-    min-height: 190px;
-    aspect-ratio: auto;
-  }
-  .z .specs li {
-    width: 100%;
-    min-width: 0;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 2px 6px;
-    padding: 3px 6px;
-    overflow-wrap: anywhere;
-  }
-  .z .specs li strong {
-    max-width: 100%;
-    overflow-wrap: anywhere;
   }
 }
 .z .bd {
@@ -446,14 +388,30 @@ nav a:hover {
   font-size: 14px;
   flex: 1;
 }
-.z.sel {
+.z.sel .z-info,
+.z.sel .z-specs {
   border-color: var(--y);
 }
 @media (max-width: 900px) {
-  .z,
-  .z.L,
-  .z.XL {
-    grid-column: span 6;
+  .z {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .z {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .z-info {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+  .z .im {
+    align-self: start;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 1/1;
+  }
+  .z-specs {
+    padding: 16px;
   }
 }
 #bk {

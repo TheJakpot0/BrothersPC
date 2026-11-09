@@ -86,21 +86,25 @@ const tf = (z, d) => (isWE(d) ? z.tariff.we : z.tariff.wd);
 // Зоны
 const renderZones = () => { $("#zg").innerHTML = ZONES.map(
   (z) => `
-    <article class="z ${z.size === "XL" ? "XL" : z.size === "L" ? "L" : ""}" id="zc-${z.id}">
-      <div class="im">
-        <img src="${z.image}" alt="${zoneName(z)}">
-        ${z.specs ? `
-          <button type="button" class="specs-toggle btn sm" aria-expanded="false">${t("specs")}</button>
+    <article class="z" id="zc-${z.id}">
+      <div class="z-info">
+        <div class="im">
+          <img src="${z.image}" alt="${zoneName(z)}">
+        </div>
+        <div class="bd">
+          <h3>${zoneName(z)}</h3>
+          <p>${zoneDescription(z)}</p>
+          <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
+        </div>
+      </div>
+      ${z.specs ? `
+        <aside class="z-specs">
+          <h4 class="specs-title">${t("specs")}</h4>
           <ul class="specs" aria-label="${t("specs")}">
             ${z.specs.map(([label, value]) => `<li><span>${localizedSpec(label)}</span><strong>${localizedSpecValue(value)}</strong></li>`).join("")}
           </ul>
-        ` : ""}
-      </div>
-      <div class="bd">
-        <h3>${zoneName(z)}</h3>
-        <p>${zoneDescription(z)}</p>
-        <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
-      </div>
+        </aside>
+      ` : ""}
     </article>
   `,
 ).join(""); };
@@ -316,15 +320,6 @@ function upd() {
   
 
 document.addEventListener("click", (e) => {
-  const specsToggle = e.target.closest(".specs-toggle");
-  if (specsToggle) {
-    const expanded = specsToggle.getAttribute("aria-expanded") !== "true";
-    specsToggle.closest(".z").classList.toggle("specs-open", expanded);
-    specsToggle.setAttribute("aria-expanded", expanded);
-    specsToggle.textContent = expanded ? t("hide") : t("specs");
-    return;
-  }
-
   const b = e.target.closest("[data-z],[data-d],[data-t],[data-k]");
   if (!b) {
     return;
