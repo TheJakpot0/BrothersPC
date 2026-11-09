@@ -74,18 +74,20 @@ h2 {
     background 0.2s,
     color 0.2s;
 }
-.btn:hover {
-  background: transparent;
-  color: var(--y);
-}
 .btn.s {
   background: transparent;
   color: var(--tx);
   border-color: var(--ln);
 }
-.btn.s:hover {
-  border-color: var(--y);
-  color: var(--y);
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    background: transparent;
+    color: var(--y);
+  }
+  .btn.s:hover {
+    border-color: var(--y);
+    color: var(--y);
+  }
 }
 .btn.sm {
   padding: 9px 14px;
