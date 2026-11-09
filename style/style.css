@@ -91,6 +91,13 @@ h2 {
   padding: 9px 14px;
   font-size: 13px;
 }
+.floating-booking {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
 header {
   position: sticky;
   top: 0;
@@ -438,13 +445,6 @@ nav a:hover {
   color: var(--mu);
   font-size: 14px;
   flex: 1;
-}
-.z .ft {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  color: var(--mu);
 }
 .z.sel {
   border-color: var(--y);

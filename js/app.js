@@ -99,10 +99,7 @@ const renderZones = () => { $("#zg").innerHTML = ZONES.map(
       <div class="bd">
         <h3>${zoneName(z)}</h3>
         <p>${zoneDescription(z)}</p>
-        <div class="ft">
-          <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
-          <button class="btn sm" data-z="${z.id}">${t("book")}</button>
-        </div>
+        <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
       </div>
     </article>
   `,
@@ -151,7 +148,6 @@ $("#pt").innerHTML = ZONES.map(
         <td class="zn">${zoneName(z)}</td>
         <td>${renderPriceColumn(z.tariff.wd || z.tariff, "wd", t("weekdaysShort"))}</td>
         <td>${renderPriceColumn(z.tariff.we || z.tariff, "we", t("weekendsShort"))}</td>
-        <td><button class="btn sm" data-z="${z.id}">${t("book")}</button></td>
       </tr>
     `,
 ).join("");
@@ -162,7 +158,6 @@ $("#pm").innerHTML = ZONES.map((z) => {
       <summary>${zoneName(z)}</summary>
       <div class="in">
         ${renderPricePair(z)}
-        <button class="btn sm" data-z="${z.id}" style="justify-self:start">${t("book")}</button>
       </div>
     </details>
   `;
