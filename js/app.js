@@ -90,9 +90,9 @@ const renderZones = () => { $("#zg").innerHTML = ZONES.map(
       <div class="z-info">
         <div class="im">
           <img src="${z.image}" alt="${zoneName(z)}">
+          <div class="img-label">${zoneName(z)}</div>
         </div>
         <div class="bd">
-          <h3>${zoneName(z)}</h3>
           <p>${zoneDescription(z)}</p>
           <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
         </div>
