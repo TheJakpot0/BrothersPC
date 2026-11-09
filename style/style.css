@@ -338,6 +338,7 @@ nav a:hover {
   bottom: 16px;
   z-index: 1;
   display: inline-block;
+  max-width: calc(100% - 32px);
   padding: 8px 12px;
   border: 1px solid rgba(245, 211, 61, 0.7);
   background: rgba(9, 10, 13, 0.72);
@@ -345,8 +346,10 @@ nav a:hover {
   font:
     700 20px Oswald,
     sans-serif;
+  line-height: 1.2;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
 }
 .z .specs {
@@ -419,6 +422,13 @@ nav a:hover {
 @media (max-width: 700px) {
   .z {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .z .img-label {
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+    padding: 6px 9px;
+    font-size: clamp(14px, 4vw, 18px);
   }
   .z-info {
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
