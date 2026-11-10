@@ -25,6 +25,13 @@ body {
     system-ui,
     sans-serif;
 }
+.data-status {
+  padding: 9px 16px;
+  background: #352b12;
+  color: #ffe989;
+  font-size: 13px;
+  text-align: center;
+}
 h1,
 h2,
 h3,

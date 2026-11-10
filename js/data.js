@@ -1,4 +1,4 @@
-const CONFIG = {
+let CONFIG = {
   whatsapp: "77778300406", // без +7, для ссылки на WhatsApp
   phone: "+77778300406", 
   instagram: "https://www.instagram.com/brothers_oskemen",
@@ -17,7 +17,7 @@ const T = (h1, h3, h5, day, night) => ({ h1, h3, h5, day, night });
 const W = (wd, we) => ({ wd, we });
 
 // seats: null = количество мест неизвестно
-const ZONES = [
+let ZONES = [
   {
     id: "general",
     name: "Общий зал",
@@ -161,4 +161,4 @@ const ZONES = [
 ];
 
 // Шаг времени начала в минутах: 15, 30 или 60 
-const TIME_STEP = 30;
+let TIME_STEP = 30;

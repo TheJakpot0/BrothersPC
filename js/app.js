@@ -29,8 +29,93 @@ const loadTranslations = async () => {
   return translations;
 };
 
-loadTranslations().then((translations) => {
+loadTranslations().then(async (translations) => {
 const $ = (s) => document.querySelector(s);
+let contentApiError = null;
+const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+})[char]);
+const safeImageURL = (value) => {
+  const image = String(value || "").trim();
+  if (!image) return "";
+  try {
+    const url = new URL(image, window.location.href);
+    return ["http:", "https:"].includes(url.protocol) ? image : "";
+  } catch {
+    return "";
+  }
+};
+const safeExternalURL = (value) => {
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+};
+const loadRemoteContent = async () => {
+  const baseURL = String(window.BROTHERS_API_URL || "http://localhost:8080").replace(/\/+$/, "");
+  const getJSON = async (path) => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 5000);
+    let response;
+    try {
+      response = await fetch(`${baseURL}/api/v1${path}`, { signal: controller.signal });
+    } finally {
+      window.clearTimeout(timeout);
+    }
+    if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+    return response.json();
+  };
+  const [config, remoteZones, settings] = await Promise.all([
+    getJSON("/config"),
+    getJSON("/zones"),
+    getJSON("/settings/time-step"),
+  ]);
+  if (
+    !config || typeof config !== "object" || Array.isArray(config) ||
+    !Number.isFinite(config.lat) || config.lat < -90 || config.lat > 90 ||
+    !Number.isFinite(config.lon) || config.lon < -180 || config.lon > 180 ||
+    !Array.isArray(remoteZones) ||
+    !settings || ![15, 30, 60].includes(settings.timeStep)
+  ) {
+    throw new Error("The content API returned invalid site data.");
+  }
+  const normalizedZones = remoteZones.map((zone) => {
+    if (
+      !zone || typeof zone !== "object" || typeof zone.id !== "string" ||
+      typeof zone.name !== "string" || typeof zone.nameKk !== "string" ||
+      !zone.tariff?.wd || !zone.tariff?.we || !Array.isArray(zone.specs)
+    ) {
+      throw new Error("The content API returned an invalid zone.");
+    }
+    for (const rate of [zone.tariff.wd, zone.tariff.we]) {
+      if (!["h1", "h3", "h5", "day", "night"].every(
+        (field) => Number.isFinite(rate[field]) && rate[field] >= 0,
+      )) {
+        throw new Error("The content API returned an invalid zone tariff.");
+      }
+    }
+    return {
+      ...zone,
+      image: safeImageURL(zone.image),
+      specs: zone.specs.map((spec) => {
+        if (Array.isArray(spec)) return spec;
+        if (!spec || typeof spec.name !== "string" || typeof spec.value !== "string") {
+          throw new Error("The content API returned an invalid zone specification.");
+        }
+        return [spec.name, spec.value];
+      }),
+    };
+  });
+  CONFIG = { ...CONFIG, ...config };
+  ZONES = normalizedZones;
+  TIME_STEP = settings.timeStep;
+};
 const zn = (id) => ZONES.find((z) => z.id === id);
 let language = localStorage.getItem("brothers-language") === "kk" ? "kk" : "ru";
 const t = (key, ...args) => {
@@ -50,6 +135,11 @@ const localizedSpec = (label) => {
 const localizedSpecValue = (value) => value === "Уточняется" ? t("specPending") : value;
 const applyLanguage = () => {
   document.documentElement.lang = language;
+  const dataStatus = $("#data-status");
+  dataStatus.hidden = !contentApiError;
+  if (contentApiError) {
+    dataStatus.textContent = t("contentApiUnavailable");
+  }
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.textContent = t(el.dataset.i18n);
   });
@@ -86,14 +176,14 @@ const tf = (z, d) => (isWE(d) ? z.tariff.we : z.tariff.wd);
 // Зоны
 const renderZones = () => { $("#zg").innerHTML = ZONES.map(
   (z) => `
-    <article class="z" id="zc-${z.id}">
+    <article class="z" id="zc-${escapeHTML(z.id)}">
       <div class="z-info">
         <div class="im">
-          <img src="${z.image}" alt="${zoneName(z)}">
-          <div class="img-label">${zoneName(z)}</div>
+          <img src="${escapeHTML(z.image)}" alt="${escapeHTML(zoneName(z))}">
+          <div class="img-label">${escapeHTML(zoneName(z))}</div>
         </div>
         <div class="bd">
-          <p>${zoneDescription(z)}</p>
+          <p>${escapeHTML(zoneDescription(z))}</p>
           <span>${z.seats ? `${z.seats} ${t("pcCount")}` : t("seatsUnknown")}</span>
         </div>
       </div>
@@ -101,7 +191,7 @@ const renderZones = () => { $("#zg").innerHTML = ZONES.map(
         <aside class="z-specs">
           <h4 class="specs-title">${t("specs")}</h4>
           <ul class="specs" aria-label="${t("specs")}">
-            ${z.specs.map(([label, value]) => `<li><span>${localizedSpec(label)}</span><strong>${localizedSpecValue(value)}</strong></li>`).join("")}
+            ${z.specs.map(([label, value]) => `<li><span>${escapeHTML(localizedSpec(label))}</span><strong>${escapeHTML(localizedSpecValue(value))}</strong></li>`).join("")}
           </ul>
         </aside>
       ` : ""}
@@ -149,7 +239,7 @@ const renderPrices = () => {
 $("#pt").innerHTML = ZONES.map(
   (z) => `
       <tr>
-        <td class="zn">${zoneName(z)}</td>
+        <td class="zn">${escapeHTML(zoneName(z))}</td>
         <td>${renderPriceColumn(z.tariff.wd || z.tariff, "wd", t("weekdaysShort"))}</td>
         <td>${renderPriceColumn(z.tariff.we || z.tariff, "we", t("weekendsShort"))}</td>
       </tr>
@@ -159,7 +249,7 @@ $("#pt").innerHTML = ZONES.map(
 $("#pm").innerHTML = ZONES.map((z) => {
   return `
     <details>
-      <summary>${zoneName(z)}</summary>
+      <summary>${escapeHTML(zoneName(z))}</summary>
       <div class="in">
         ${renderPricePair(z)}
       </div>
@@ -238,7 +328,7 @@ function renderAll() {
 
   $("#bz").innerHTML = ZONES.map(
     (z) =>
-    `<button type="button" class="chip" aria-pressed="${z.id === st.zone}" data-z="${z.id}">${zoneName(z)}</button>`,
+    `<button type="button" class="chip" aria-pressed="${z.id === st.zone}" data-z="${escapeHTML(z.id)}">${escapeHTML(zoneName(z))}</button>`,
   ).join("");
 
   $("#bday").innerHTML = [0, 1]
@@ -437,7 +527,7 @@ $("#send").addEventListener("click", () => {
   }
 
   window.open(
-    `https://wa.me/${CONFIG.whatsapp || ""}?text=${encodeURIComponent(msg.join("\n"))}`,
+    `https://wa.me/${String(CONFIG.whatsapp || "").replace(/\D/g, "")}?text=${encodeURIComponent(msg.join("\n"))}`,
     "_blank",
     "noopener",
   );
@@ -445,59 +535,52 @@ $("#send").addEventListener("click", () => {
 
 // Карта и контакты
 const ph = (v) => v || t("addedSoon");
-let address = language === "kk" ? CONFIG.addressKk || CONFIG.address : CONFIG.address;
-$("#ad").textContent = address || t("addressSoon");
-const q = encodeURIComponent("Brothers Cyber Club");
-const has = CONFIG.lat != null && CONFIG.lon != null;
+let address;
+const renderMap = () => {
+  address = language === "kk" ? CONFIG.addressKk || CONFIG.address : CONFIG.address;
+  $("#ad").textContent = address || t("addressSoon");
+  const has = CONFIG.lat != null && CONFIG.lon != null;
+  if (has && CONFIG.twoGisKey && !window.mapgl) {
+    const script = document.createElement("script");
+    script.src = "https://mapgl.2gis.com/api/js/v1";
+    script.onload = () => {
+      const map = new mapgl.Map("mp", {
+        center: [CONFIG.lon, CONFIG.lat],
+        zoom: 16,
+        key: CONFIG.twoGisKey,
+      });
+      new mapgl.Marker(map, { coordinates: [CONFIG.lon, CONFIG.lat] });
+    };
+    document.head.appendChild(script);
+  } else if (has && !CONFIG.twoGisKey) {
+    const k = 0.004;
+    const bb = [
+      CONFIG.lon - k,
+      CONFIG.lat - k / 2,
+      CONFIG.lon + k,
+      CONFIG.lat + k / 2,
+    ].join("%2C");
+    $("#mp").innerHTML =
+      `<iframe title="${t("mapTitle")}" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${CONFIG.lat}%2C${CONFIG.lon}"></iframe>`;
+  } else if (!has) {
+    $("#mp").innerHTML =
+      `<p>${escapeHTML(address || t("addressFallback"))}<br>${t("openClub2gis")}</p>`;
+  }
 
-if (has && CONFIG.twoGisKey) {
-  $("#mp").innerHTML = "";
-  const s = document.createElement("script");
-  s.src = "https://mapgl.2gis.com/api/js/v1";
-  s.onload = () => {
-    const m = new mapgl.Map("mp", {
-      center: [CONFIG.lon, CONFIG.lat],
-      zoom: 16,
-      key: CONFIG.twoGisKey,
-    });
-    new mapgl.Marker(m, { coordinates: [CONFIG.lon, CONFIG.lat] });
-  };
-  document.head.appendChild(s);
-} else if (has) {
-  const k = 0.004;
-  const bb = [
-    CONFIG.lon - k,
-    CONFIG.lat - k / 2,
-    CONFIG.lon + k,
-    CONFIG.lat + k / 2,
-  ].join("%2C");
-  $("#mp").innerHTML =
-    `<iframe title="${t("mapTitle")}" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${bb}&layer=mapnik&marker=${CONFIG.lat}%2C${CONFIG.lon}"></iframe>`;
-} else {
-  $("#mp").innerHTML =
-    `<p>${address || t("addressFallback")}<br>${t("openClub2gis")}</p>`;
-}
-
-const base = CONFIG.twoGisUrl || `https://2gis.kz/search/${q}`;
-const oid = (CONFIG.twoGisUrl || "").match(/\/(?:geo|firm)\/(\d+)/);
-const city = CONFIG.twoGisCity || "ust-kamenogorsk";
-
-// формат 2GIS: /directions/points/<откуда>|<куда>; пустое «откуда» = местоположение пользователя
-$("#rt").href = has
-  ? `https://2gis.kz/${city}/directions/points/%7C${CONFIG.lon}%2C${CONFIG.lat}${oid ? `%3B${oid[1]}` : ""}`
-  : base;
-$("#o2").href = CONFIG.twoGisFirmId
-  ? `https://2gis.kz/firm/${CONFIG.twoGisFirmId}`
-  : base;
+  const q = encodeURIComponent("Brothers Cyber Club");
+  const base = safeExternalURL(CONFIG.twoGisUrl) || `https://2gis.kz/search/${q}`;
+  const oid = (CONFIG.twoGisUrl || "").match(/\/(?:geo|firm)\/(\d+)/);
+  const city = CONFIG.twoGisCity || "ust-kamenogorsk";
+  $("#rt").href = has
+    ? `https://2gis.kz/${city}/directions/points/%7C${CONFIG.lon}%2C${CONFIG.lat}${oid ? `%3B${oid[1]}` : ""}`
+    : base;
+  $("#o2").href = CONFIG.twoGisFirmId
+    ? `https://2gis.kz/firm/${CONFIG.twoGisFirmId}`
+    : base;
+};
 const renderContactInfo = () => {
   address = language === "kk" ? CONFIG.addressKk || CONFIG.address : CONFIG.address;
   $("#ad").textContent = address || t("addressSoon");
-  if (!has) {
-    $("#mp").innerHTML = `<p>${address || t("addressFallback")}<br>${t("openClub2gis")}</p>`;
-  } else {
-    const mapFrame = $("#mp iframe");
-    if (mapFrame) mapFrame.title = t("mapTitle");
-  }
   $("#cg").innerHTML = [
   [t("addressLabel"), address],
   [t("phone"), CONFIG.phone],
@@ -506,14 +589,19 @@ const renderContactInfo = () => {
   [t("hoursLabel"), CONFIG.hours],
 ]
   .map(([k, v]) => {
-    const value =
-      k === "Instagram" && v
-        ? `<a class="instagram-link" href="${v}" target="_blank" rel="noopener noreferrer">@${new URL(v).pathname.split("/").filter(Boolean).pop()}</a>`
-        : ph(v);
-    return `<div><dt>${k}</dt><dd class="${v ? "" : "na"}">${value}</dd></div>`;
+    const instagramURL = k === t("instagramLabel") && v ? safeExternalURL(v) : "";
+    let value = escapeHTML(ph(v));
+    if (instagramURL) {
+      const handle = new URL(instagramURL).pathname.split("/").filter(Boolean).pop();
+      value = handle
+        ? `<a class="instagram-link" href="${escapeHTML(instagramURL)}" target="_blank" rel="noopener noreferrer">@${escapeHTML(handle)}</a>`
+        : escapeHTML(v);
+    }
+    return `<div><dt>${escapeHTML(k)}</dt><dd class="${v ? "" : "na"}">${value}</dd></div>`;
   })
   .join("");
 };
+renderMap();
 renderContactInfo();
 $("#yr").textContent = new Date().getFullYear();
 
@@ -561,6 +649,22 @@ applyLanguage();
 renderZones();
 renderPrices();
 renderAll();
+loadRemoteContent()
+  .then(() => {
+    if (!ZONES.some((zone) => zone.id === st.zone)) {
+      st.zone = ZONES[0]?.id || null;
+    }
+    renderZones();
+    renderPrices();
+    renderAll();
+    renderMap();
+    renderContactInfo();
+  })
+  .catch((error) => {
+    contentApiError = error;
+    console.error("Could not load current site content from the API; using bundled defaults.", error);
+    applyLanguage();
+  });
 }).catch((error) => {
   console.error("Could not initialize page translations.", error);
   const message = document.createElement("main");

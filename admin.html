@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090a0d" />
+    <title>Админ-панель | Brothers Cyber Lounge</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/admin.css" />
+    <script src="js/runtime-config.js" defer></script>
+    <script src="js/admin.js" defer></script>
+  </head>
+  <body>
+    <main id="login-screen" class="login-screen">
+      <form id="login-form" class="login-card">
+        <a class="brand" href="index.html">BROTHERS <b>ADMIN</b></a>
+        <p class="eyebrow">ПАНЕЛЬ УПРАВЛЕНИЯ</p>
+        <h1>Вход в систему</h1>
+        <p class="muted">Используйте учетную запись администратора клуба.</p>
+
+        <label for="api-url">Адрес API</label>
+        <input id="api-url" name="apiUrl" type="url" value="http://localhost:8080" required />
+        <label for="username">Логин</label>
+        <input id="username" name="username" autocomplete="username" required />
+        <label for="password">Пароль</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <button class="button primary full" type="submit">Войти</button>
+        <p id="login-error" class="notice error" role="alert" hidden></p>
+        <a class="back-link" href="index.html">← Вернуться на сайт</a>
+      </form>
+    </main>
+
+    <div id="admin-app" class="app-shell" hidden>
+      <aside class="sidebar">
+        <a class="brand" href="index.html">BROTHERS <b>ADMIN</b></a>
+        <p class="eyebrow">УПРАВЛЕНИЕ</p>
+        <nav class="side-nav" aria-label="Разделы панели">
+          <button type="button" class="nav-link active" data-page="overview">Обзор</button>
+          <button type="button" class="nav-link" data-page="zones">Игровые зоны</button>
+          <button type="button" class="nav-link" data-page="config">Контакты и адрес</button>
+          <button type="button" class="nav-link" data-page="settings">Настройки</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <a class="back-link" href="index.html">← Открыть сайт</a>
+          <button id="logout-button" class="button secondary full" type="button">Выйти</button>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">BROTHERS CYBER LOUNGE</p>
+            <h1 id="page-title">Обзор</h1>
+          </div>
+          <span id="api-indicator" class="api-indicator">API не подключен</span>
+        </header>
+
+        <div id="app-notice" class="notice" role="status" hidden></div>
+
+        <section class="page active" data-panel="overview">
+          <div class="welcome-card">
+            <div>
+              <p class="eyebrow">АДМИНИСТРИРОВАНИЕ</p>
+              <h2>Все важное — под рукой</h2>
+              <p class="muted">Управляйте контентом, который хранится в API.</p>
+            </div>
+            <span class="welcome-mark" aria-hidden="true">B</span>
+          </div>
+          <div class="summary-grid">
+            <article class="summary-card">
+              <span class="summary-icon">01</span>
+              <p class="muted">Игровых зон</p>
+              <strong id="zone-count">—</strong>
+              <button type="button" class="text-button" data-go="zones">Управлять зонами →</button>
+            </article>
+            <article class="summary-card">
+              <span class="summary-icon">02</span>
+              <p class="muted">Шаг начала брони</p>
+              <strong id="time-step-value">—</strong>
+              <button type="button" class="text-button" data-go="settings">Настроить →</button>
+            </article>
+            <article class="summary-card">
+              <span class="summary-icon">03</span>
+              <p class="muted">Состояние API</p>
+              <strong id="connection-value">—</strong>
+              <span class="muted small">Данные загружаются с сервера</span>
+            </article>
+          </div>
+          <p class="footnote">Брони здесь пока не отображаются: backend еще не предоставляет API для управления бронями.</p>
+        </section>
+
+        <section class="page" data-panel="zones" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">КОНТЕНТ САЙТА</p>
+              <h2>Игровые зоны</h2>
+              <p class="muted">Названия, характеристики и тарифы для будней и выходных.</p>
+            </div>
+            <button id="add-zone" class="button primary" type="button">＋ Добавить зону</button>
+          </div>
+          <div id="zones-list" class="zones-list"></div>
+        </section>
+
+        <section class="page" data-panel="config" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">КОНТЕНТ САЙТА</p>
+              <h2>Контакты и адрес</h2>
+              <p class="muted">Изменения сохраняются в API; публичная страница пока использует статическую конфигурацию.</p>
+            </div>
+          </div>
+          <form id="config-form" class="form-card">
+            <div class="form-grid">
+              <label>Телефон<input name="phone" type="text" required /></label>
+              <label>WhatsApp, номер без «+»<input name="whatsapp" type="text" required /></label>
+              <label>Instagram<input name="instagram" type="url" /></label>
+              <label>Часы работы<input name="hours" type="text" required /></label>
+              <label class="span-2">Адрес (русский)<input name="address" type="text" required /></label>
+              <label class="span-2">Адрес (казахский)<input name="addressKk" type="text" required /></label>
+              <label>Широта<input name="lat" type="number" step="any" required /></label>
+              <label>Долгота<input name="lon" type="number" step="any" required /></label>
+              <label class="span-2">Ссылка на 2GIS<input name="twoGisUrl" type="url" /></label>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Сохранить контакты</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="page" data-panel="settings" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">БРОНИРОВАНИЕ</p>
+              <h2>Настройки времени</h2>
+              <p class="muted">Измените интервал времени, который хранится в API для формы бронирования.</p>
+            </div>
+          </div>
+          <form id="settings-form" class="form-card settings-card">
+            <label for="time-step">Шаг времени</label>
+            <select id="time-step" name="timeStep" required>
+              <option value="15">15 минут</option>
+              <option value="30">30 минут</option>
+              <option value="60">60 минут</option>
+            </select>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Сохранить настройки</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <dialog id="zone-dialog" class="zone-dialog">
+      <form id="zone-form" class="dialog-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">КОНТЕНТ САЙТА</p>
+            <h2 id="zone-dialog-title">Новая зона</h2>
+          </div>
+          <button id="close-zone-dialog" class="icon-button" type="button" aria-label="Закрыть">×</button>
+        </div>
+
+        <div class="form-grid">
+          <label>ID зоны<input name="id" pattern="[a-z0-9]([a-z0-9_]|-){0,63}" required /></label>
+          <label>Размер<input name="size" type="text" required /></label>
+          <label>Название (русский)<input name="name" type="text" required /></label>
+          <label>Название (казахский)<input name="nameKk" type="text" required /></label>
+          <label>Количество мест<input name="seats" type="number" min="1" /></label>
+          <label class="span-2">Путь к изображению<input name="image" type="text" placeholder="img/zones/example.jpg" /></label>
+          <label class="span-2">Описание (русский)<textarea name="desc" rows="3" required></textarea></label>
+          <label class="span-2">Описание (казахский)<textarea name="descKk" rows="3" required></textarea></label>
+        </div>
+
+        <div class="tariff-section">
+          <h3>Тарифы, ₸</h3>
+          <div class="tariff-grid">
+            <div class="tariff-head"><span>Период</span><span>1 час</span><span>3 часа</span><span>5 часов</span><span>День</span><span>Ночь</span></div>
+            <div class="tariff-row" data-tariff="wd"><strong>Будни</strong></div>
+            <div class="tariff-row" data-tariff="we"><strong>Выходные</strong></div>
+          </div>
+        </div>
+
+        <div class="specs-section">
+          <div class="section-heading compact">
+            <div><h3>Характеристики</h3><p class="muted small">Добавьте оборудование или особенности зоны.</p></div>
+            <button id="add-spec" class="button secondary small-button" type="button">＋ Характеристика</button>
+          </div>
+          <div id="specs-list" class="specs-list"></div>
+        </div>
+
+        <div class="form-actions sticky-actions">
+          <button id="cancel-zone" class="button secondary" type="button">Отмена</button>
+          <button class="button primary" type="submit">Сохранить зону</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
