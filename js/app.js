@@ -58,7 +58,7 @@ const safeExternalURL = (value) => {
   }
 };
 const loadRemoteContent = async () => {
-  const baseURL = String(window.BROTHERS_API_URL || "http://localhost:8080").replace(/\/+$/, "");
+  const baseURL = String(window.BROTHERS_API_URL).replace(/\/+$/, "");
   const getJSON = async (path) => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 5000);
