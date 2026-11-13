@@ -8,6 +8,7 @@
     expires: "brothers-admin-expires",
   };
   const tokenStorage = window.sessionStorage;
+  const zoneSize = "L";
   let apiBase = tokenStorage.getItem(storageKeys.api) || window.BROTHERS_API_URL || "http://localhost:8080";
   let zones = [];
   let editingZoneId = null;
@@ -194,7 +195,7 @@
       const title = document.createElement("h3");
       title.textContent = zone.name || zone.id;
       const subtitle = document.createElement("p");
-      subtitle.textContent = `${zone.id} · ${zone.seats == null ? "места не указаны" : `${zone.seats} мест`} · ${zone.size || "размер не указан"}`;
+      subtitle.textContent = `${zone.id} · ${zone.seats == null ? "места не указаны" : `${zone.seats} мест`}`;
       description.append(title, subtitle);
 
       const actions = document.createElement("div");
@@ -268,7 +269,7 @@
     const form = $("#zone-form");
     form.reset();
     $("#zone-dialog-title").textContent = zone ? "Редактировать зону" : "Новая зона";
-    fillForm(form, zone || { size: "L" });
+    fillForm(form, zone || {});
     form.elements.namedItem("id").readOnly = Boolean(zone);
     populateTariffs(zone);
     $("#specs-list").replaceChildren();
@@ -293,7 +294,7 @@
       id: values.id.trim(),
       name: values.name.trim(),
       nameKk: values.nameKk.trim(),
-      size: values.size.trim(),
+      size: zoneSize,
       seats: values.seats === "" ? null : Number(values.seats),
       desc: values.desc.trim(),
       descKk: values.descKk.trim(),
