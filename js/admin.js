@@ -2,14 +2,13 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const storageKeys = {
-    api: "brothers-admin-api",
     access: "brothers-admin-access",
     refresh: "brothers-admin-refresh",
     expires: "brothers-admin-expires",
   };
   const tokenStorage = window.sessionStorage;
   const zoneSize = "L";
-  let apiBase = tokenStorage.getItem(storageKeys.api) || window.BROTHERS_API_URL || "http://localhost:8080";
+  const apiBase = String(window.BROTHERS_API_URL).replace(/\/+$/, "");
   let zones = [];
   let editingZoneId = null;
   let refreshInFlight = null;
@@ -21,27 +20,12 @@
   const loginError = $("#login-error");
   const appNotice = $("#app-notice");
 
-  $("#api-url").value = apiBase;
-
   class ApiError extends Error {
     constructor(message, status) {
       super(message);
       this.name = "ApiError";
       this.status = status;
     }
-  }
-
-  function normalizedApiBase(value) {
-    let url;
-    try {
-      url = new URL(value.trim());
-    } catch {
-      throw new Error("Укажите корректный адрес API.");
-    }
-    if (!["http:", "https:"].includes(url.protocol)) {
-      throw new Error("Адрес API должен начинаться с http:// или https://.");
-    }
-    return url.href.replace(/\/+$/, "");
   }
 
   function setNotice(message, type = "success") {
@@ -359,8 +343,6 @@
     const submit = $('button[type="submit"]', loginForm);
     submit.disabled = true;
     try {
-      apiBase = normalizedApiBase($("#api-url").value);
-      tokenStorage.setItem(storageKeys.api, apiBase);
       const credentials = Object.fromEntries(new FormData(loginForm).entries());
       const tokens = await rawRequest("/auth/login", {
         method: "POST",
@@ -481,8 +463,6 @@
   async function restoreSession() {
     if (!tokenStorage.getItem(storageKeys.access)) return;
     try {
-      apiBase = normalizedApiBase(tokenStorage.getItem(storageKeys.api) || apiBase);
-      $("#api-url").value = apiBase;
       await openDashboard();
     } catch (error) {
       clearTokens();

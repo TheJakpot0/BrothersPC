@@ -1,1 +1,1 @@
-window.BROTHERS_API_URL = window.BROTHERS_API_URL || "http://localhost:8080";
+window.BROTHERS_API_URL = "https://brothers-backend-production.up.railway.app";
