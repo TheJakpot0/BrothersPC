@@ -194,7 +194,7 @@
       const title = document.createElement("h3");
       title.textContent = zone.name || zone.id;
       const subtitle = document.createElement("p");
-      subtitle.textContent = `${zone.id} · ${zone.seats == null ? "места не указаны" : `${zone.seats} мест`}`;
+      subtitle.textContent = `${zone.id} · ${zone.seats == null ? "места не указаны" : `${zone.seats} мест`} · ${zone.size || "размер не указан"}`;
       description.append(title, subtitle);
 
       const actions = document.createElement("div");
@@ -268,7 +268,7 @@
     const form = $("#zone-form");
     form.reset();
     $("#zone-dialog-title").textContent = zone ? "Редактировать зону" : "Новая зона";
-    fillForm(form, zone || {});
+    fillForm(form, zone || { size: "L" });
     form.elements.namedItem("id").readOnly = Boolean(zone);
     populateTariffs(zone);
     $("#specs-list").replaceChildren();
@@ -293,6 +293,7 @@
       id: values.id.trim(),
       name: values.name.trim(),
       nameKk: values.nameKk.trim(),
+      size: values.size.trim(),
       seats: values.seats === "" ? null : Number(values.seats),
       desc: values.desc.trim(),
       descKk: values.descKk.trim(),
@@ -424,7 +425,9 @@
       }
       renderZones();
       $("#zone-dialog").close();
-      setNotice(editingZoneId ? "Зона и тарифы обновлены." : "Зона добавлена.");
+      setNotice(editingZoneId
+        ? "Зона сохранена в API. Публичный сайт пока использует статические данные."
+        : "Зона добавлена в API. Публичный сайт пока использует статические данные.");
     } catch (error) {
       handleRequestError(error);
     }
@@ -452,7 +455,7 @@
         body: JSON.stringify(config),
       });
       fillForm(form, savedConfig);
-      setNotice("Контактные данные обновлены.");
+      setNotice("Данные сохранены в API. Публичный сайт пока использует статическую конфигурацию.");
     } catch (error) {
       handleRequestError(error);
     }
@@ -468,7 +471,7 @@
       });
       $("#time-step").value = String(settings.timeStep);
       $("#time-step-value").textContent = `${settings.timeStep} мин`;
-      setNotice("Настройки времени обновлены.");
+      setNotice("Настройки сохранены в API. Публичная форма пока не загружает их автоматически.");
     } catch (error) {
       handleRequestError(error);
     }
