@@ -147,6 +147,26 @@
               <button class="button primary" type="submit">Сохранить настройки</button>
             </div>
           </form>
+
+          <div class="section-heading security-heading">
+            <div>
+              <p class="eyebrow">УЧЕТНАЯ ЗАПИСЬ</p>
+              <h2>Смена пароля</h2>
+              <p class="muted">Для подтверждения укажите текущий пароль.</p>
+            </div>
+          </div>
+          <form id="password-form" class="form-card settings-card">
+            <label for="current-password">Текущий пароль</label>
+            <input id="current-password" name="currentPassword" type="password" autocomplete="current-password" required />
+            <label for="new-password">Новый пароль</label>
+            <input id="new-password" name="newPassword" type="password" autocomplete="new-password" required />
+            <label for="confirm-password">Повторите новый пароль</label>
+            <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" required />
+            <p id="password-error" class="notice error" role="alert" hidden></p>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Изменить пароль</button>
+            </div>
+          </form>
         </section>
       </div>
     </div>

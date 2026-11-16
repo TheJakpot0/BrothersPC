@@ -460,6 +460,45 @@
     }
   });
 
+  $("#password-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const currentPassword = form.elements.namedItem("currentPassword").value;
+    const newPassword = form.elements.namedItem("newPassword").value;
+    const confirmPassword = form.elements.namedItem("confirmPassword").value;
+    const errorNotice = $("#password-error");
+    errorNotice.hidden = true;
+
+    if (newPassword !== confirmPassword) {
+      errorNotice.textContent = "Новые пароли не совпадают.";
+      errorNotice.hidden = false;
+      return;
+    }
+    if (newPassword === currentPassword) {
+      errorNotice.textContent = "Новый пароль должен отличаться от текущего.";
+      errorNotice.hidden = false;
+      return;
+    }
+
+    const submit = $('button[type="submit"]', form);
+    submit.disabled = true;
+    try {
+      await apiRequest("/auth/password", {
+        method: "PUT",
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      form.reset();
+      setNotice("Пароль успешно изменен.");
+    } catch (error) {
+      errorNotice.textContent = error.message || "Не удалось изменить пароль.";
+      errorNotice.hidden = false;
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
   async function restoreSession() {
     if (!tokenStorage.getItem(storageKeys.access)) return;
     try {

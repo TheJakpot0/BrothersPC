@@ -113,6 +113,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--yellow); outline
 .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
 .settings-card { max-width: 520px; }
 .settings-card label { max-width: 300px; }
+.settings-card > input { margin-top: 8px; margin-bottom: 18px; }
+.security-heading { margin-top: 42px; }
 
 .zone-dialog { width: min(900px, calc(100% - 24px)); max-width: none; max-height: min(92vh, 1000px); padding: 0; border: 1px solid #373a43; background: var(--bg); color: var(--text); }
 .zone-dialog::backdrop { background: rgba(0, 0, 0, .76); backdrop-filter: blur(3px); }
