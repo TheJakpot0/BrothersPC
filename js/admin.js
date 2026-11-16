@@ -492,7 +492,9 @@
       form.reset();
       setNotice("Пароль успешно изменен.");
     } catch (error) {
-      errorNotice.textContent = error.message || "Не удалось изменить пароль.";
+      errorNotice.textContent = error instanceof ApiError && error.status === 401
+        ? "Неверный пароль."
+        : error.message || "Не удалось изменить пароль.";
       errorNotice.hidden = false;
     } finally {
       submit.disabled = false;
