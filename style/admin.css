@@ -104,6 +104,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--yellow); outline
 .zone-card p { margin: 0; color: var(--muted); font-size: 11px; }
 .zone-actions { display: flex; flex: none; gap: 8px; }
 .zone-actions .button { min-height: 36px; padding: 7px 12px; font-size: 11px; }
+.zone-actions .zone-move { width: 36px; flex: none; padding: 7px; font-size: 16px; }
+.zone-actions .zone-move:disabled { cursor: default; opacity: .35; }
 .empty-state { padding: 32px; border: 1px dashed var(--line); color: var(--muted); text-align: center; font-size: 13px; }
 
 .form-card { padding: 24px; border: 1px solid var(--line); background: var(--panel); }
@@ -161,6 +163,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--yellow); outline
   .zone-card { align-items: start; flex-direction: column; }
   .zone-actions { width: 100%; }
   .zone-actions .button { flex: 1; }
+  .zone-actions .zone-move { width: 36px; flex: none; }
   .form-card { padding: 18px; }
   .form-grid { grid-template-columns: 1fr; }
   .span-2 { grid-column: auto; }

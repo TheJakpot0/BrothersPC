@@ -6,6 +6,7 @@
     refresh: "brothers-admin-refresh",
     expires: "brothers-admin-expires",
   };
+  const zoneOrderKey = "brothers-admin-zone-order";
   const tokenStorage = window.sessionStorage;
   const zoneSize = "L";
   const apiBase = String(window.BROTHERS_API_URL).replace(/\/+$/, "");
@@ -161,6 +162,33 @@
     return button;
   }
 
+  function moveZone(index, offset) {
+    const targetIndex = index + offset;
+    if (targetIndex < 0 || targetIndex >= zones.length) return;
+    [zones[index], zones[targetIndex]] = [zones[targetIndex], zones[index]];
+    window.localStorage.setItem(zoneOrderKey, JSON.stringify(zones.map((zone) => zone.id)));
+    renderZones();
+  }
+
+  function applySavedZoneOrder(loadedZones) {
+    let savedIds = [];
+    try {
+      const savedOrder = JSON.parse(window.localStorage.getItem(zoneOrderKey) || "[]");
+      if (Array.isArray(savedOrder)) savedIds = savedOrder;
+    } catch {
+      savedIds = [];
+    }
+    const positions = new Map(savedIds.map((id, index) => [id, index]));
+    return [...loadedZones].sort((first, second) => {
+      const firstPosition = positions.get(first.id);
+      const secondPosition = positions.get(second.id);
+      if (firstPosition == null && secondPosition == null) return 0;
+      if (firstPosition == null) return 1;
+      if (secondPosition == null) return -1;
+      return firstPosition - secondPosition;
+    });
+  }
+
   function renderZones() {
     const list = $("#zones-list");
     list.replaceChildren();
@@ -172,7 +200,7 @@
       list.append(empty);
       return;
     }
-    zones.forEach((zone) => {
+    zones.forEach((zone, index) => {
       const card = document.createElement("article");
       card.className = "zone-card";
       const description = document.createElement("div");
@@ -184,7 +212,17 @@
 
       const actions = document.createElement("div");
       actions.className = "zone-actions";
+      const moveUp = makeButton("↑", "button secondary zone-move", () => moveZone(index, -1));
+      moveUp.setAttribute("aria-label", `Переместить зону «${zone.name || zone.id}» вверх`);
+      moveUp.title = "Переместить вверх";
+      moveUp.disabled = index === 0;
+      const moveDown = makeButton("↓", "button secondary zone-move", () => moveZone(index, 1));
+      moveDown.setAttribute("aria-label", `Переместить зону «${zone.name || zone.id}» вниз`);
+      moveDown.title = "Переместить вниз";
+      moveDown.disabled = index === zones.length - 1;
       actions.append(
+        moveUp,
+        moveDown,
         makeButton("Редактировать", "button secondary", () => openZoneEditor(zone)),
         makeButton("Удалить", "button danger", () => deleteZone(zone)),
       );
@@ -307,7 +345,7 @@
       apiRequest("/settings/time-step"),
     ]);
     if (!Array.isArray(loadedZones)) throw new Error("API вернул неверный формат списка зон.");
-    zones = loadedZones;
+    zones = applySavedZoneOrder(loadedZones);
     renderZones();
     fillForm($("#config-form"), config);
     $("#time-step").value = String(settings.timeStep);
